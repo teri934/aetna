@@ -9,17 +9,9 @@
 
 using namespace siv;
 
-void LandGenerator::GenerateLand(SDL_Surface* screen) {
-	unsigned int* pixels = (unsigned int*)screen->pixels;
-
-	double frequency = 2; //0.1-64
-	int octaves = 1; //1-16
-
-	const int width = screen->w;
-	const int height = screen->h;
-	double fx = width / frequency;
-	double fy = height / frequency;
-
+void LandGenerator::GenerateLand() {
+	
+	pixels = (unsigned int*)screenSurface->pixels;
 
 	PerlinNoise perlin(1234);
 
@@ -31,7 +23,20 @@ void LandGenerator::GenerateLand(SDL_Surface* screen) {
 
 			vector<int> v = Converter::hsvToRgb(200, 100, value);
 			pixels[x + y * width] =
-				SDL_MapRGBA(screen->format, v[0], v[1], v[2], 255);
+				SDL_MapRGBA(screenSurface->format, v[0], v[1], v[2], 255);
+		}
+	}
+
+	LandPrinter::PrintLand(*this, arr);
+}
+
+void LandPrinter::PrintLand(const LandGenerator& g, vector<vector<unsigned int>>& arr) {
+	
+	for (size_t y = 0; y < g.height; ++y)
+	{
+		for (size_t x = 0; x < g.width; ++x)
+		{
+			g.pixels[x + y * g.width] = arr[y][x];
 		}
 	}
 }
