@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="land.cpp" />
+    <ClCompile Include="hsv_rgb.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="perlin.h" />

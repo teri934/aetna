@@ -21,6 +21,9 @@
     <ClCompile Include="land.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="hsv_rgb.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="land.h">
