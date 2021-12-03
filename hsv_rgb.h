@@ -31,7 +31,7 @@ public:
         auto q = v * (1 - f * s);
         auto t = v * (1 - (1 - f) * s);
 
-        int ii = i;
+        int ii = (int)i;
 
         switch (ii % 6) {
         case 0: r = v, g = t, b = p; break;
@@ -42,9 +42,9 @@ public:
         case 5: r = v, g = p, b = q; break;
         }
 
-        vector[0] = r * 255;
-        vector[1] = g * 255;
-        vector[2] = b * 255;
+        vector[0] = (int)(r * 255);
+        vector[1] = (int)(g * 255);
+        vector[2] = (int)(b * 255);
 
         return vector;
     }
