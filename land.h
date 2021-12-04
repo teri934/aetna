@@ -26,17 +26,17 @@ public:
 	LandGenerator(SDL_Surface* ss) {
 		screenSurface = ss;
 
-		arr.resize(height, std::vector<unsigned int>(width));
+		arr.resize(height, std::vector < double > (width));
 	}
 	void GenerateLand();
 
 private:
-	std::vector<std::vector<unsigned int>> arr;
+	std::vector<std::vector<double>> arr;
 };
 
 class LandPrinter {
 public:
-	static void PrintLand(const LandGenerator& g, std::vector<std::vector<unsigned int>>& arr);
+	static void PrintLand(const LandGenerator& g, std::vector<std::vector<double>>& arr);
 };
 
 #endif

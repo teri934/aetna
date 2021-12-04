@@ -33,4 +33,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="images\flower.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\sheep.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\volcano.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

@@ -19,24 +19,23 @@ void LandGenerator::GenerateLand() {
 	{
 		for (size_t x = 0; x < width; ++x)
 		{
-			auto value = (floor)(perlin.accumulatedOctaveNoise2D_0_1(x / fx, y / fy, octaves) * 10.) / 10.;
-
-			vector<int> v = Converter::hsvToRgb(200, 100, value);
-			pixels[x + y * width] =
-				SDL_MapRGBA(screenSurface->format, v[0], v[1], v[2], 255);
+			auto value = perlin.accumulatedOctaveNoise2D_0_1(x / fx, y / fy, octaves);
+			arr[y][x] = value;
 		}
 	}
 
 	LandPrinter::PrintLand(*this, arr);
 }
 
-void LandPrinter::PrintLand(const LandGenerator& g, vector<vector<unsigned int>>& arr) {
+void LandPrinter::PrintLand(const LandGenerator& g, vector<vector<double>>& arr) {
 	
 	for (size_t y = 0; y < g.height; ++y)
 	{
 		for (size_t x = 0; x < g.width; ++x)
 		{
-			g.pixels[x + y * g.width] = arr[y][x];
+			auto floor_value = (floor)(arr[y][x] * 10.) / 10.;
+			vector<int> v = Converter::hsvToRgb(120 / 360., 1, floor_value);
+			g.pixels[x + y * g.width] = SDL_MapRGBA(g.screenSurface->format, v[0], v[1], v[2], 255);
 		}
 	}
 }

@@ -151,6 +151,11 @@
     <ClInclude Include="perlin.h" />
     <ClInclude Include="land.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="images\flower.png" />
+    <Image Include="images\sheep.png" />
+    <Image Include="images\volcano.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
