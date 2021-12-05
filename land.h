@@ -12,6 +12,7 @@ class LandGenerator {
 public:
 	unsigned int* pixels = 0;
 	SDL_Surface* screenSurface = NULL;
+	SDL_Renderer* renderer = NULL;
 
 	const int width = 640;
 	const int height = 480;
@@ -23,8 +24,9 @@ public:
 	double fy = height / frequency;
 
 
-	LandGenerator(SDL_Surface* ss) {
+	LandGenerator(SDL_Surface* ss, SDL_Renderer* r) {
 		screenSurface = ss;
+		renderer = r;
 
 		arr.resize(height, std::vector < double > (width));
 	}

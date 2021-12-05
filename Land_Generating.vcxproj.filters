@@ -34,13 +34,13 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="images\flower.png">
+    <Image Include="images\flower_mini.bmp">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="images\sheep.png">
+    <Image Include="images\sheep_mini.bmp">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="images\volcano.png">
+    <Image Include="images\volcano_mini.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

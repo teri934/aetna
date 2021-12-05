@@ -25,6 +25,21 @@ void LandGenerator::GenerateLand() {
 	}
 
 	LandPrinter::PrintLand(*this, arr);
+
+
+	auto* image = SDL_LoadBMP("images/flower_mini.bmp");
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, image);
+	//SDL_FreeSurface(image);
+
+	SDL_Rect rect;
+	rect.x = 200;
+	rect.y = 200;
+	rect.w = 50;
+	rect.h = 50 / 1.77;
+
+	//SDL_BlitSurface(image, NULL, screenSurface, &rect);
+	SDL_RenderCopy(renderer, texture, NULL, &rect);
+	SDL_RenderPresent(renderer);
 }
 
 void LandPrinter::PrintLand(const LandGenerator& g, vector<vector<double>>& arr) {

@@ -10,7 +10,6 @@ const int SCREEN_HEIGHT = 480;
 int main( int argc, char* args[] )
 {
 	SDL_Window* window = NULL;
-	SDL_Surface* screenSurface = NULL;
 
 	//Initialize SDL
 	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
@@ -28,9 +27,12 @@ int main( int argc, char* args[] )
 		else
 		{
 
-			screenSurface = SDL_GetWindowSurface(window);
+			SDL_Surface* screenSurface = SDL_GetWindowSurface(window);
+			SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
 
-			LandGenerator generator(screenSurface);
+			
+
+			LandGenerator generator(screenSurface, renderer);
 			generator.GenerateLand();
 
 			//Fill the surface white
