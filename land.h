@@ -8,6 +8,11 @@
 #include <vector>
 #include<iostream>
 
+struct Field {
+	double value;
+	char sign;
+};
+
 class LandGenerator {
 public:
 	unsigned int* pixels = 0;
@@ -17,8 +22,8 @@ public:
 	const int width = 640;
 	const int height = 480;
 
-	double frequency = 2; //0.1-64
-	int octaves = 1; //1-16
+	double frequency = 4; //0.1-64
+	int octaves = 2; //1-16
 
 	double fx = width / frequency;
 	double fy = height / frequency;
@@ -28,17 +33,18 @@ public:
 		screenSurface = ss;
 		renderer = r;
 
-		arr.resize(height, std::vector < double > (width));
+		arr.resize(height, std::vector<Field>(width));
 	}
 	void GenerateLand();
 
 private:
-	std::vector<std::vector<double>> arr;
+	std::vector<std::vector<Field>> arr;
 };
+
 
 class LandPrinter {
 public:
-	static void PrintLand(const LandGenerator& g, std::vector<std::vector<double>>& arr);
+	static void PrintLand(const LandGenerator& g, std::vector<std::vector<Field>>& arr);
 };
 
 #endif

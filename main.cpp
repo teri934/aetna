@@ -43,6 +43,10 @@ int main( int argc, char* args[] )
 
 			//Wait ten seconds
 			SDL_Delay( 10000 );
+
+
+			SDL_DestroyRenderer(renderer);
+			SDL_FreeSurface(screenSurface);
 		}
 	}
 
