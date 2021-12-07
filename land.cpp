@@ -5,6 +5,7 @@
 #include <SDL.h>
 #include <iostream>
 #include <vector>
+#include <string>
 
 
 using namespace siv;
@@ -17,7 +18,7 @@ void LandGenerator::GenerateLand() {
 
 	std::random_device rd;
 	std::mt19937 mt(rd());
-	std::uniform_int_distribution<int> dist(0, 5000);
+	std::uniform_int_distribution<int> dist(0, 500);
 
 	for (size_t y = 0; y < height; ++y)
 	{
@@ -30,7 +31,7 @@ void LandGenerator::GenerateLand() {
 
 				auto random = dist(mt);
 
-				if(random == 1)
+				if(random == 1 && value > 0.6)
 					arr[y][x] = Field(value, 'f');
 				else
 					arr[y][x] = Field(value, '*');
@@ -45,23 +46,35 @@ void LandGenerator::GenerateLand() {
 
 void LandPrinter::PrintLand(const LandGenerator& g, vector<vector<Field>>& arr) {
 
+	const float full_circle = 360;
+	const size_t green_color = 222;
+	const size_t blue_color = 111;
+
+
 	for (size_t y = 0; y < g.height; ++y)
 	{
 		for (size_t x = 0; x < g.width; ++x)
 		{
 			if (arr[y][x].sign == 'l') {
-				vector<int> v = Converter::hsvToRgb(222 / 360., 1, 1);
-				g.pixels[x + y * g.width] = SDL_MapRGBA(g.screenSurface->format, v[0], v[1], v[2], 255);
+				vector<int> v = Converter::hsvToRgb(green_color / full_circle, 1, 1);
+				g.pixels[x + y * g.width] = SDL_MapRGBA(g.screenSurface->format, v[Color::red], v[Color::green], v[Color::blue], 255);
 			}
 			else {
 				auto floor_value = (floor)(arr[y][x].value * 10.) / 10.;
-				vector<int> v = Converter::hsvToRgb(111 / 360., 1, floor_value);
-				g.pixels[x + y * g.width] = SDL_MapRGBA(g.screenSurface->format, v[0], v[1], v[2], 255);
+				vector<int> v = Converter::hsvToRgb(blue_color / full_circle, 1, floor_value);
+				g.pixels[x + y * g.width] = SDL_MapRGBA(g.screenSurface->format, v[Color::red], v[Color::green], v[Color::blue], 255);
 			}
 		}
 	}
 
-	auto* image = SDL_LoadBMP("images/flower_mini.bmp");
+
+	PrintObjects(g, arr, "images/flower_mini.bmp");
+}
+
+
+void LandPrinter::PrintObjects(const LandGenerator& g, vector<vector<Field>>& arr, const char* path) {
+
+	auto* image = SDL_LoadBMP(path);
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(g.renderer, image);
 	SDL_FreeSurface(image);
 
@@ -70,17 +83,20 @@ void LandPrinter::PrintLand(const LandGenerator& g, vector<vector<Field>>& arr) 
 		for (size_t x = 0; x < g.width; ++x)
 		{
 			if (arr[y][x].sign == 'f') {
-				SDL_Rect rect;
-				rect.x = x;
-				rect.y = y;
-				rect.w = 50;
-				rect.h = 50 / 1.77;
-
-				//SDL_BlitSurface(image, NULL, screenSurface, &rect);
-				SDL_RenderCopy(g.renderer, texture, NULL, &rect);
-				SDL_RenderPresent(g.renderer);
+				PrintObject(x, y, texture, g);
 			}
 		}
 	}
+}
 
+void LandPrinter::PrintObject(size_t& x, size_t& y, SDL_Texture* texture, const LandGenerator& g) {
+
+	SDL_Rect rect;
+	rect.x = (x - 16) % g.width;
+	rect.y = (y - 16) % g.height;
+	rect.w = 33;
+	rect.h = 33 / 1.77;
+
+	SDL_RenderCopy(g.renderer, texture, NULL, &rect);
+	SDL_RenderPresent(g.renderer);
 }

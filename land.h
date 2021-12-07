@@ -13,6 +13,12 @@ struct Field {
 	char sign;
 };
 
+enum Color {
+	red,
+	green,
+	blue
+};
+
 class LandGenerator {
 public:
 	unsigned int* pixels = 0;
@@ -45,6 +51,8 @@ private:
 class LandPrinter {
 public:
 	static void PrintLand(const LandGenerator& g, std::vector<std::vector<Field>>& arr);
+	static void PrintObjects(const LandGenerator& g, std::vector<std::vector<Field>>& arr, const char* path);
+	static void PrintObject(size_t& x, size_t& y, SDL_Texture* texture, const LandGenerator& g);
 };
 
 #endif
