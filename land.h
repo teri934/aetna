@@ -66,7 +66,7 @@ public:
 	void PrintObjects(const LandGenerator& g, std::vector<std::vector<Field>>& arr, const char* path, const char c);
 	void PrintObject(size_t& x, size_t& y, SDL_Texture* texture, const LandGenerator& g);
 
-	const char* FLOWER_PATH = "images / flower_mini.bmp";
+	const char* FLOWER_PATH = "images/flower_mini.bmp";
 	const char* VOLCANO_PATH = "images/volcano_mini.bmp";
 	const char* SHEEP_PATH = "images/sheep_mini.bmp";
 };
