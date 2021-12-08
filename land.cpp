@@ -20,19 +20,23 @@ void LandGenerator::GenerateLand() {
 	std::mt19937 mt(rd());
 	std::uniform_int_distribution<int> dist(0, 500);
 
-	for (size_t y = 0; y < height; ++y)
+	for (size_t y = 0; y < HEIGHT; ++y)
 	{
-		for (size_t x = 0; x < width; ++x)
+		for (size_t x = 0; x < WIDTH; ++x)
 		{
 			auto value = perlin.accumulatedOctaveNoise2D_0_1(x / fx, y / fy, octaves);
 
 
-			if (value < 0.7) {
+			if (value < BORDER_LAKE) {
 
 				auto random = dist(mt);
 
-				if(random == 1 && value > 0.6)
+				if(random == Object::flower && value > BORDER_FLOWER)
 					arr[y][x] = Field(value, 'f');
+				else if(random == Object::volcano && value  < BORDER_VOLCANO)
+					arr[y][x] = Field(value, 'v');
+				else if(random == Object::sheep && value > BORDER_SHEEP && value < BORDER_FLOWER)
+					arr[y][x] = Field(value, 's');
 				else
 					arr[y][x] = Field(value, '*');
 			}
@@ -41,7 +45,8 @@ void LandGenerator::GenerateLand() {
 		}
 	}
 
-	LandPrinter::PrintLand(*this, arr);
+	LandPrinter printer;
+	printer.PrintLand(*this, arr);
 }
 
 void LandPrinter::PrintLand(const LandGenerator& g, vector<vector<Field>>& arr) {
@@ -51,38 +56,40 @@ void LandPrinter::PrintLand(const LandGenerator& g, vector<vector<Field>>& arr) 
 	const size_t blue_color = 111;
 
 
-	for (size_t y = 0; y < g.height; ++y)
+	for (size_t y = 0; y < g.HEIGHT; ++y)
 	{
-		for (size_t x = 0; x < g.width; ++x)
+		for (size_t x = 0; x < g.WIDTH; ++x)
 		{
 			if (arr[y][x].sign == 'l') {
 				vector<int> v = Converter::hsvToRgb(green_color / full_circle, 1, 1);
-				g.pixels[x + y * g.width] = SDL_MapRGBA(g.screenSurface->format, v[Color::red], v[Color::green], v[Color::blue], 255);
+				g.pixels[x + y * g.WIDTH] = SDL_MapRGBA(g.screenSurface->format, v[Color::red], v[Color::green], v[Color::blue], 255);
 			}
 			else {
 				auto floor_value = (floor)(arr[y][x].value * 10.) / 10.;
 				vector<int> v = Converter::hsvToRgb(blue_color / full_circle, 1, floor_value);
-				g.pixels[x + y * g.width] = SDL_MapRGBA(g.screenSurface->format, v[Color::red], v[Color::green], v[Color::blue], 255);
+				g.pixels[x + y * g.WIDTH] = SDL_MapRGBA(g.screenSurface->format, v[Color::red], v[Color::green], v[Color::blue], 255);
 			}
 		}
 	}
 
 
-	PrintObjects(g, arr, "images/flower_mini.bmp");
+	PrintObjects(g, arr, FLOWER_PATH, 'f');
+	PrintObjects(g, arr, VOLCANO_PATH, 'v');
+	PrintObjects(g, arr, SHEEP_PATH, 's');
 }
 
 
-void LandPrinter::PrintObjects(const LandGenerator& g, vector<vector<Field>>& arr, const char* path) {
+void LandPrinter::PrintObjects(const LandGenerator& g, vector<vector<Field>>& arr, const char* path, const char c) {
 
 	auto* image = SDL_LoadBMP(path);
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(g.renderer, image);
 	SDL_FreeSurface(image);
 
-	for (size_t y = 0; y < g.height; ++y)
+	for (size_t y = 0; y < g.HEIGHT; ++y)
 	{
-		for (size_t x = 0; x < g.width; ++x)
+		for (size_t x = 0; x < g.WIDTH; ++x)
 		{
-			if (arr[y][x].sign == 'f') {
+			if (arr[y][x].sign == c) {
 				PrintObject(x, y, texture, g);
 			}
 		}
@@ -92,8 +99,8 @@ void LandPrinter::PrintObjects(const LandGenerator& g, vector<vector<Field>>& ar
 void LandPrinter::PrintObject(size_t& x, size_t& y, SDL_Texture* texture, const LandGenerator& g) {
 
 	SDL_Rect rect;
-	rect.x = (x - 16) % g.width;
-	rect.y = (y - 16) % g.height;
+	rect.x = (x - 16) % g.WIDTH;
+	rect.y = (y - 16) % g.HEIGHT;
 	rect.w = 33;
 	rect.h = 33 / 1.77;
 
