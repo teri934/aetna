@@ -148,6 +148,7 @@
     <ClCompile Include="hsv_rgb.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="beings.h" />
     <ClInclude Include="perlin.h" />
     <ClInclude Include="land.h" />
   </ItemGroup>

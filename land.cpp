@@ -20,7 +20,7 @@ void LandGenerator::GenerateLand() {
 	std::mt19937 mt(rd());
 	std::uniform_int_distribution<int> dist(0, 500);
 
-	for (size_t y = 0; y < HEIGHT; ++y)
+	for (size_t y = 0; y < HEIGHT; ++y)              //inicializacia hodnot v arr (plocha, flower, lake, volcano, sheep) podla nejakych kriterii
 	{
 		for (size_t x = 0; x < WIDTH; ++x)
 		{
@@ -47,10 +47,50 @@ void LandGenerator::GenerateLand() {
 
 	LandPrinter printer;
 	printer.PrintLand(*this, arr);
+
+	//SDL_Texture* background = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 640, 480);
+
+	printer.PrintObjects(*this, arr, printer.FLOWER_PATH, 'f');  //ja som to mala doteraz takto, ze sa mi to vsetko renderuje na seba
+	printer.PrintObjects(*this, arr, printer.VOLCANO_PATH, 'v'); //ale v pripade ze by som tymi objektami chcela hybat, tak ich potrebujem nejako vymazat
+	                                                             //tak som myslela, ze nejako to dat do inej texture... ako s tym kodom pre ovce tam dole
+	                                                             //ze ich chcem v tej dalsej vrstve zmazat, ked to odkomentujes a spustis, tak uvidis, ako sa tam kopia
+
+
+
+
+	//SDL_Texture* texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 640, 480);
+
+	//std::random_device rd_sheep;
+	//std::mt19937 mt_sheep(rd_sheep());
+	//std::uniform_int_distribution<int> dist_sheep(-5, 5);
+	//while (simulation) {
+
+	//	printer.PrintObjects(*this, arr, printer.SHEEP_PATH, 's');
+	//	MoveSheep(dist_sheep(mt_sheep), dist(mt_sheep));
+	//}
 }
 
-void LandPrinter::PrintLand(const LandGenerator& g, vector<vector<Field>>& arr) {
+void LandGenerator::MoveSheep(int shift_x, int shift_y) {  //ma simulovat pohyb, este nie je dokoncena
+	for (size_t y = 0; y < HEIGHT; ++y)
+	{
+		for (size_t x = 0; x < WIDTH; ++x)
+		{
+			if (arr[y][x].sign == 's') {
+				//arr[y][x].sign = '*';
 
+				size_t new_y = (y + shift_y) % HEIGHT;
+				size_t new_x = (x + shift_x) % WIDTH;
+
+				if(arr[new_y][new_x].sign != 'l')
+					arr[new_y][new_x].sign = 's';
+			}
+
+		}
+	}
+}
+
+void LandPrinter::PrintLand(const LandGenerator& g, vector<vector<Field>>& arr) {  //funkcia, ktora podla hodnoty arr priradi farbu pixelu na okne
+	                                                                               //ak tam bolo l, tak je to jazero, takze nezalezi na value
 	const float full_circle = 360;
 	const size_t green_color = 222;
 	const size_t blue_color = 111;
@@ -71,16 +111,11 @@ void LandPrinter::PrintLand(const LandGenerator& g, vector<vector<Field>>& arr) 
 			}
 		}
 	}
-
-
-	PrintObjects(g, arr, FLOWER_PATH, 'f');
-	PrintObjects(g, arr, VOLCANO_PATH, 'v');
-	PrintObjects(g, arr, SHEEP_PATH, 's');
 }
 
 
-void LandPrinter::PrintObjects(const LandGenerator& g, vector<vector<Field>>& arr, const char* path, const char c) {
-
+void LandPrinter::PrintObjects(const LandGenerator& g, vector<vector<Field>>& arr, const char* path, const char c) {  //nacita konkretny obrazok
+	                                                                                                                  // a pozrie na suradnice, kde sa ma vyprintit
 	auto* image = SDL_LoadBMP(path);
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(g.renderer, image);
 	SDL_FreeSurface(image);

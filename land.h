@@ -1,5 +1,3 @@
-#pragma once
-
 #ifndef LAND_H_
 #define LAND_H_
 
@@ -30,6 +28,7 @@ public:
 	unsigned int* pixels = 0;
 	SDL_Surface* screenSurface = NULL;
 	SDL_Renderer* renderer = NULL;
+	bool simulation = true;
 
 	const int WIDTH = 640;
 	const int HEIGHT = 480;
@@ -54,6 +53,9 @@ public:
 
 	}
 	void GenerateLand();
+
+private:
+	void MoveSheep(int shift_x, int shift_y);
 
 private:
 	std::vector<std::vector<Field>> arr;
