@@ -18,21 +18,21 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="land.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="hsv_rgb.h">
       <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="land.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="perlin.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="beings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="world.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="helper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

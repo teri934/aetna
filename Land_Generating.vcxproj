@@ -144,13 +144,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="land.cpp" />
     <ClCompile Include="hsv_rgb.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="beings.h" />
+    <ClInclude Include="helper.h" />
+    <ClInclude Include="world.h" />
     <ClInclude Include="perlin.h" />
-    <ClInclude Include="land.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="images\flower_mini.bmp" />
