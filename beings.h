@@ -15,7 +15,7 @@ using valptr = std::unique_ptr<Being>;
 
 class Being {
 protected:
-	World* world;
+	World* world = NULL;
 
 	virtual void Move(const Point& direction) {
 		position = position + direction;
@@ -24,7 +24,6 @@ public:
 	Point position;
 	virtual valptr Clone() = 0;
 
-	Being() {};
 	Being(const Point& p, World* w) : position(p), world(w) {};
 	virtual ~Being() {}
 };

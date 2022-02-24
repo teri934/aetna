@@ -21,6 +21,9 @@
     <ClCompile Include="hsv_rgb.h">
       <Filter>Header Files</Filter>
     </ClCompile>
+    <ClCompile Include="world.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="perlin.h">
