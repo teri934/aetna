@@ -6,7 +6,7 @@
 //Screen dimension constants
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
-const unsigned int frame = 200;
+const unsigned int frame = 500;
 
 int main( int argc, char* args[] )
 {
@@ -20,7 +20,7 @@ int main( int argc, char* args[] )
 	texture = SDL_CreateTexture
 	(
 		renderer,
-		SDL_PIXELFORMAT_BGR24,
+		SDL_PIXELFORMAT_RGB24,
 		SDL_TEXTUREACCESS_STREAMING,
 		SCREEN_WIDTH, SCREEN_HEIGHT
 	);
@@ -29,7 +29,7 @@ int main( int argc, char* args[] )
 	//SDL_Texture* tm_icons = SDL_CreateTextureFromSurface(renderer, icons);
 	//SDL_FreeSurface(icons);
 
-	World world = World(SCREEN_HEIGHT, SCREEN_WIDTH);;
+	World world = World(SCREEN_HEIGHT, SCREEN_WIDTH, renderer);;
 	unsigned int current, last = 0;
 
 	bool cycle = true;
@@ -51,16 +51,12 @@ int main( int argc, char* args[] )
 				reinterpret_cast<void**>(&pixels),
 				&pitch
 			);
-			world.Render(pixels);
+			world.RenderTerrain(pixels);
+			SDL_RenderCopy(renderer, texture, NULL, NULL);
 
 			SDL_UnlockTexture(texture);
 
-			//Mapping actors (numbered in linear manner) to texture atlas (8 rows, 8 columns).
-			//sq88.x = (static_cast<int>(world.current_actor) * 8) % 64;
-			//sq88.y = (static_cast<int>(world.current_actor) >> 3) * 8;
-
-			SDL_RenderCopy(renderer, texture, NULL, NULL);
-			//SDL_RenderCopy(renderer, tm_icons, &sq88, &icon_pos);
+			world.RenderBeings();
 			SDL_RenderPresent(renderer);
 
 			last = current;
@@ -69,7 +65,6 @@ int main( int argc, char* args[] )
 
 
 	SDL_DestroyTexture(texture);
-	//SDL_DestroyTexture(tm_icons);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow( window );
 

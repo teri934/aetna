@@ -18,13 +18,39 @@ void World::generateTerrain(vector<vector<float>>* terrain) {
 	{
 		for (size_t x = 0; x < WIDTH; ++x)
 		{
-			float value = perlin.accumulatedOctaveNoise2D_0_1(x / fx, y / fy, octaves);
+			float value = (float)perlin.accumulatedOctaveNoise2D_0_1(x/fx, y/fy, octaves);
 			(*terrain)[y][x] = value;
 		}
 	}
 }
 
-void World::Render(unsigned char* target) {
+
+void World::generateTextures() {
+
+	for (size_t i = 0; i < paths.size(); i++)
+	{
+		SDL_Surface* picture = SDL_LoadBMP(paths[i].c_str());
+		SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, picture);
+		textures.push_back(move(texture));
+	}
+}
+
+void World::generateDefaultBeings() {
+
+	for (size_t y = 0; y < HEIGHT; ++y)
+	{
+		for (size_t x = 0; x < WIDTH; ++x)
+		{
+			int value = rand() % SIZE;
+
+			if (value < (WIDTH * HEIGHT)/200 && terrain[y][x] > 0.6f) {
+				beings.push_back(make_unique<Flower>(Point(x, y), this));
+			}
+		}
+	}
+}
+
+void World::RenderTerrain(unsigned char* target) {
 	const float full_circle = 360;
 	const size_t green_color = 222;
 	const size_t blue_color = 111;
@@ -44,3 +70,20 @@ void World::Render(unsigned char* target) {
 		}
 	}
 }
+
+void World::RenderBeings() {
+
+	SDL_Rect rect;
+	rect.w = 32;
+	rect.h = 16;
+
+	for (size_t i = 0; i < beings.size(); i +=10)
+	{
+		rect.x = (int)beings[i]->position.x;
+		rect.y = (int)beings[i]->position.y;
+
+		auto ID = static_cast<uint8_t>(beings[i]->GetBeing());
+		SDL_RenderCopy(renderer, textures[ID], NULL, &rect);
+	}
+}
+

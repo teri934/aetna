@@ -2,11 +2,11 @@
 #define HELPER_H_
 
 struct Point {
-	int x;
-	int y;
+	size_t x;
+	size_t y;
 
 	Point() : x(0), y(0) {};
-	Point(int a, int b) : x(a), y(b) {};
+	Point(size_t a, size_t b) : x(a), y(b) {};
 
 	Point operator= (const Point& p) {
 		return Point(p.x, p.y);
