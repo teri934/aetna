@@ -51,7 +51,7 @@ int main( int argc, char* args[] )
 				reinterpret_cast<void**>(&pixels),
 				&pitch
 			);
-			//world.Render(pixels);
+			world.Render(pixels);
 
 			SDL_UnlockTexture(texture);
 
@@ -59,7 +59,7 @@ int main( int argc, char* args[] )
 			//sq88.x = (static_cast<int>(world.current_actor) * 8) % 64;
 			//sq88.y = (static_cast<int>(world.current_actor) >> 3) * 8;
 
-			//SDL_RenderCopy(renderer, texture, NULL, NULL);
+			SDL_RenderCopy(renderer, texture, NULL, NULL);
 			//SDL_RenderCopy(renderer, tm_icons, &sq88, &icon_pos);
 			SDL_RenderPresent(renderer);
 
@@ -67,16 +67,6 @@ int main( int argc, char* args[] )
 		}
 	}
 
-			
-	//Update the surface
-	SDL_UpdateWindowSurface(window);
-
-	//Wait ten seconds
-	SDL_Delay( 10000 );
-
-
-
-	//SDL_FreeSurface(screenSurface);
 
 	SDL_DestroyTexture(texture);
 	//SDL_DestroyTexture(tm_icons);
