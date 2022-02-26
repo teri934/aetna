@@ -15,9 +15,11 @@ class Being;
 using being_ptr = std::unique_ptr<Being>;
 
 enum class ListBeings : Uint8 {
-	FLOWER,
+	VIOLET_FLOWER,
+	RED_FLOWER,
 	SHEEP,
-	VOLCANO
+	VOLCANO,
+	EMPTY
 };
 
 class Being {
@@ -30,7 +32,15 @@ protected:
 public:
 	Point position;
 	virtual being_ptr Clone() = 0;
+
+	//gets ID for type of being
 	virtual ListBeings GetBeing() = 0;
+
+	//gets size of the result image in pixels
+	virtual Size GetSize() = 0;
+
+	//does one step in discrete simulation
+	virtual void Simulate() = 0;
 
 	Being(const Point& p, World* w) : position(p), world(w) {};
 	virtual ~Being() {}
@@ -42,13 +52,26 @@ public:
 	Sheep(const Point& position, World* world) : Being(position, world) {}
 	being_ptr Clone() override { return std::make_unique<Sheep>(*this); }
 	ListBeings GetBeing() override { return ListBeings::SHEEP; }
+	Size GetSize() override { return Size(36, 18); }
+	void Simulate() override;
 };
 
-class Flower : public Being {
+class VioletFlower : public Being {
 public:
-	Flower(const Point& position, World* world) : Being(position, world) {}
-	being_ptr Clone() override { return std::make_unique<Flower>(*this); }
-	ListBeings GetBeing() override { return ListBeings::FLOWER; }
+	VioletFlower(const Point& position, World* world) : Being(position, world) {}
+	being_ptr Clone() override { return std::make_unique<VioletFlower>(*this); }
+	ListBeings GetBeing() override { return ListBeings::VIOLET_FLOWER; }
+	Size GetSize() override { return Size(24, 12); }
+	void Simulate() override;
+};
+
+class RedFlower : public Being {
+public:
+	RedFlower(const Point& position, World* world) : Being(position, world) {}
+	being_ptr Clone() override { return std::make_unique<RedFlower>(*this); }
+	ListBeings GetBeing() override { return ListBeings::RED_FLOWER; }
+	Size GetSize() override { return Size(24, 12); }
+	void Simulate() override;
 };
 
 
@@ -57,6 +80,8 @@ public:
 	Volcano(const Point& position, World* world) : Being(position, world) {}
 	being_ptr Clone() override { return std::make_unique<Volcano>(*this); }
 	ListBeings GetBeing() override { return ListBeings::VOLCANO; }
+	Size GetSize() override { return Size(32, 16); }
+	void Simulate() override;
 
 protected:
 	void Move(const Point& direction) override {this->position = position;}

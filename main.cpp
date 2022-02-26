@@ -15,7 +15,7 @@ int main( int argc, char* args[] )
 	SDL_Texture* texture;
 
 	//Create window
-	window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_VULKAN);
+	window = SDL_CreateWindow( "LifeSim", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_VULKAN);
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
 	texture = SDL_CreateTexture
 	(
@@ -42,7 +42,7 @@ int main( int argc, char* args[] )
 			unsigned char* pixels = nullptr;
 			int pitch = 0;
 
-			//world.Step();
+			world.Simulate();
 
 			SDL_LockTexture
 			(
