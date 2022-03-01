@@ -1,4 +1,3 @@
-#include <SDL.h>
 #include <iostream>
 #include "world.h"
 

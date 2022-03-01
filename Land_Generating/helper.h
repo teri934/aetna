@@ -3,11 +3,11 @@
 
 
 struct Size {
-	size_t width;
-	size_t height;
+	int width;
+	int height;
 
 	Size() : width(0), height(0) {};
-	Size(size_t width, size_t height) : width(width), height(height) {};
+	Size(int width, int height) : width(width), height(height) {};
 
 	Size operator&= (const Size& s) {
 		return Size(s.width, s.height);
@@ -32,9 +32,9 @@ struct Point {
 
 	Point operator% (const Size& s) {
 		if (x < 0)
-			x = s.width - 1;
+			x = (int)s.width - 1;
 		if (y < 0)
-			y = s.height - 1;
+			y = (int)s.height - 1;
 
 		return Point(x % s.width, y % s.height);
 	}

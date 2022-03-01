@@ -80,27 +80,20 @@ void World::RenderTerrain(unsigned char* target) {
 
 void World::RenderBeings() {
 
+	renderArray(&nature);
+	renderArray(&animals);
+}
+
+void World::renderArray(vector<being_ptr>* arr){
 	SDL_Rect rect;
-
-	for (size_t i = 0; i < nature.size(); ++i)
+	for (size_t i = 0; i < arr->size(); ++i)
 	{
-		rect.x = (int)nature[i]->Position.x;
-		rect.y = (int)nature[i]->Position.y;
-		rect.w = (int)nature[i]->GetSize().width;
-		rect.h = (int)nature[i]->GetSize().height;
+		rect.w = (*arr)[i]->GetSize().width;
+		rect.h = (*arr)[i]->GetSize().height;
+		rect.x = (*arr)[i]->Position.x - (rect.w >> 1);
+		rect.y = (*arr)[i]->Position.y - (rect.h >> 1);
 
-		auto ID = static_cast<uint8_t>(nature[i]->GetBeing());
-		SDL_RenderCopy(renderer, textures[ID], NULL, &rect);
-	}
-
-	for (size_t i = 0; i < animals.size(); ++i)
-	{
-		rect.x = (int)animals[i]->Position.x;
-		rect.y = (int)animals[i]->Position.y;
-		rect.w = (int)animals[i]->GetSize().width;
-		rect.h = (int)animals[i]->GetSize().height;
-
-		auto ID = static_cast<uint8_t>(animals[i]->GetBeing());
+		auto ID = static_cast<uint8_t>((*arr)[i]->GetBeing());
 		SDL_RenderCopy(renderer, textures[ID], NULL, &rect);
 	}
 }

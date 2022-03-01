@@ -42,6 +42,7 @@ private:
 	vector<being_ptr> animals;
 	void generateTerrain(vector<vector<float>>* terrain);
 	void generateDefaultBeings();
+	void renderArray(vector<being_ptr>* arr);
 public:
 	size_t HEIGHT;
 	size_t WIDTH;
@@ -49,9 +50,9 @@ public:
 	vector<vector<ListBeings>> beings;
 
 	World(size_t HEIGHT, size_t WIDTH, SDL_Renderer* renderer) : HEIGHT(HEIGHT), WIDTH(WIDTH), renderer(renderer){
-		srand(time(NULL));
+		srand((unsigned int)time(NULL));
 
-		WorldSize = Size(WIDTH, HEIGHT);
+		WorldSize = Size((int)WIDTH, (int)HEIGHT);
 		SIZE = WIDTH * HEIGHT;
 		fx = WIDTH / frequency;
 		fy = HEIGHT / frequency;
