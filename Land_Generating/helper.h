@@ -2,6 +2,9 @@
 #define HELPER_H_
 
 
+/*
+* helper structure to store dimensions
+*/
 struct Size {
 	int width;
 	int height;
@@ -15,6 +18,9 @@ struct Size {
 
 };
 
+/*
+* 2D vector representation of the position
+*/ 
 struct Point {
 	int x;
 	int y;

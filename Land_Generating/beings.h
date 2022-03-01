@@ -26,19 +26,28 @@ class Being {
 protected:
 	World* world = NULL;
 
+	/*
+	*moves being from one point to another
+	*/
 	virtual void Move(const Point& direction);
 public:
 	Point Position;
 
 	virtual being_ptr Clone() = 0;
 
-	//gets ID for type of being
+	/*
+	* gets ID for type of being
+	*/
 	virtual ListBeings GetBeing() = 0;
 
-	//gets size of the result image in pixels
+	/*
+	* gets size of the result image in pixels
+	*/
 	virtual Size GetSize() = 0;
 
-	//does one step in discrete simulation
+	/*
+	* does one step in discrete simulation
+	*/
 	virtual void Simulate() = 0;
 
 	Being(const Point& p, World* w) : Position(p), world(w) {};

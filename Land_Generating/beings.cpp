@@ -9,7 +9,7 @@ void Being::Move(const Point& direction) {
 
 void Sheep::Simulate() {
 
-	int x_direction = (rand() % 8) - 4;
+	int x_direction = (rand() % 8) - 4;  //random position where to move
 	int y_direction = (rand() % 8) - 4;
 
 	Point direction = Point(x_direction, y_direction);

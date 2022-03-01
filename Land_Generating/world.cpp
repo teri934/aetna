@@ -2,6 +2,9 @@
 
 using namespace siv;
 
+/*
+* using perlin noise generates terrain with higher and lower regions
+*/
 void World::generateTerrain(vector<vector<float>>* terrain) {
 
 	PerlinNoise perlin(1234);
@@ -16,7 +19,9 @@ void World::generateTerrain(vector<vector<float>>* terrain) {
 	}
 }
 
-
+/*
+* generating textures from given pictures
+*/
 void World::generateTextures() {
 
 	for (size_t i = 0; i < paths.size(); i++)
@@ -27,6 +32,9 @@ void World::generateTextures() {
 	}
 }
 
+/*
+* generating beings at the beginning of the simulation
+*/
 void World::generateDefaultBeings() {
 
 	const float LOWLAND = 0.6f;
@@ -61,6 +69,9 @@ void World::generateDefaultBeings() {
 	}
 }
 
+/*
+* applies to perlin-noise-generated terrain colors and writes it to the target bitmap
+*/
 void World::RenderTerrain(unsigned char* target) {
 
 	for (size_t y = 0; y < HEIGHT; ++y)
@@ -84,6 +95,9 @@ void World::RenderBeings() {
 	renderArray(&animals);
 }
 
+/*
+* from the given array takes the correct textures and "glues" it to the result bitmap
+*/
 void World::renderArray(vector<being_ptr>* arr){
 	SDL_Rect rect;
 	for (size_t i = 0; i < arr->size(); ++i)
@@ -98,6 +112,9 @@ void World::renderArray(vector<being_ptr>* arr){
 	}
 }
 
+/*
+* for every being calls its simulate method
+*/
 void World::Simulate() {
 	for (size_t i = 0; i < nature.size(); ++i)
 		nature[i]->Simulate();
