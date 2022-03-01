@@ -26,11 +26,10 @@ class Being {
 protected:
 	World* world = NULL;
 
-	virtual void Move(const Point& direction) {
-		position = position + direction;
-	}
+	virtual void Move(const Point& direction);
 public:
-	Point position;
+	Point Position;
+
 	virtual being_ptr Clone() = 0;
 
 	//gets ID for type of being
@@ -42,7 +41,7 @@ public:
 	//does one step in discrete simulation
 	virtual void Simulate() = 0;
 
-	Being(const Point& p, World* w) : position(p), world(w) {};
+	Being(const Point& p, World* w) : Position(p), world(w) {};
 	virtual ~Being() {}
 };
 
@@ -84,7 +83,7 @@ public:
 	void Simulate() override;
 
 protected:
-	void Move(const Point& direction) override {this->position = position;}
+	void Move(const Point& direction) override {this->Position = Position;}
 };
 
 #endif // !BEINGS_H_
