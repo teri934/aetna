@@ -1,11 +1,4 @@
-#include <SDL.h>
-#include <iostream>
-#include <vector>
-#include <string>
-
 #include "world.h"
-#include "perlin.h"
-#include "hsv_rgb.h"
 
 using namespace siv;
 
@@ -39,11 +32,12 @@ void World::generateDefaultBeings() {
 	const float LOWLAND = 0.6f;
 	const float HIGHLAND = 0.3f;
 	const float LOW_PROB = SIZE * 0.00001f;
+	const float MID_PROB = SIZE * 0.00005f;
 	const float HIGH_PROB = SIZE * 0.0002f;
 
-	for (size_t y = 0; y < HEIGHT; ++y)
+	for (int y = 0; y < HEIGHT; ++y)
 	{
-		for (size_t x = 0; x < WIDTH; ++x)
+		for (int x = 0; x < WIDTH; ++x)
 		{
 			int value = rand() % SIZE;
 
@@ -52,7 +46,7 @@ void World::generateDefaultBeings() {
 				nature.push_back(make_unique<RedFlower>(Point(x, y), this));
 				beings[y][x] = ListBeings::RED_FLOWER;
 			}
-			else if (value < LOW_PROB && terrain[y][x] > HIGHLAND) {
+			else if (value < MID_PROB && terrain[y][x] > HIGHLAND) {
 				animals.push_back(make_unique<Sheep>(Point(x, y), this));
 				beings[y][x] = ListBeings::SHEEP;
 			}
@@ -90,8 +84,8 @@ void World::RenderBeings() {
 
 	for (size_t i = 0; i < nature.size(); ++i)
 	{
-		rect.x = (int)nature[i]->position.x;
-		rect.y = (int)nature[i]->position.y;
+		rect.x = (int)nature[i]->Position.x;
+		rect.y = (int)nature[i]->Position.y;
 		rect.w = (int)nature[i]->GetSize().width;
 		rect.h = (int)nature[i]->GetSize().height;
 
@@ -101,8 +95,8 @@ void World::RenderBeings() {
 
 	for (size_t i = 0; i < animals.size(); ++i)
 	{
-		rect.x = (int)animals[i]->position.x;
-		rect.y = (int)animals[i]->position.y;
+		rect.x = (int)animals[i]->Position.x;
+		rect.y = (int)animals[i]->Position.y;
 		rect.w = (int)animals[i]->GetSize().width;
 		rect.h = (int)animals[i]->GetSize().height;
 
@@ -117,5 +111,10 @@ void World::Simulate() {
 
 	for (size_t i = 0; i < animals.size(); ++i)
 		animals[i]->Simulate();
+}
+
+
+Point World::GetResultPosition(Being* being, const Point& direction) {
+	return (being->Position + direction) % WorldSize;
 }
 

@@ -2,13 +2,14 @@
 #define WORLD_H_
 
 #include <SDL.h>
-#include <cstring>
+#include <iostream>
 #include <vector>
-#include<iostream>
+#include <string>
 
-#include "beings.h"
 #include "perlin.h"
 #include "hsv_rgb.h"
+
+#include "beings.h"
 
 using namespace std;
 
@@ -37,7 +38,6 @@ private:
 	void generateTextures();
 
 	vector<vector<float>> terrain;
-	vector<vector<ListBeings>> beings;
 	vector<being_ptr> nature;
 	vector<being_ptr> animals;
 	void generateTerrain(vector<vector<float>>* terrain);
@@ -45,7 +45,13 @@ private:
 public:
 	size_t HEIGHT;
 	size_t WIDTH;
+	Size WorldSize;
+	vector<vector<ListBeings>> beings;
+
 	World(size_t HEIGHT, size_t WIDTH, SDL_Renderer* renderer) : HEIGHT(HEIGHT), WIDTH(WIDTH), renderer(renderer){
+		srand(time(NULL));
+
+		WorldSize = Size(WIDTH, HEIGHT);
 		SIZE = WIDTH * HEIGHT;
 		fx = WIDTH / frequency;
 		fy = HEIGHT / frequency;
@@ -62,6 +68,7 @@ public:
 	void RenderTerrain(unsigned char* target);
 	void RenderBeings();
 	void Simulate();
+	Point GetResultPosition(Being* being, const Point& direction);
 };
 
 #endif

@@ -6,7 +6,7 @@
 //Screen dimension constants
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
-const unsigned int frame = 500;
+const unsigned int frame = 100;
 
 int main( int argc, char* args[] )
 {
@@ -15,7 +15,7 @@ int main( int argc, char* args[] )
 	SDL_Texture* texture;
 
 	//Create window
-	window = SDL_CreateWindow( "LifeSim", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_VULKAN);
+	window = SDL_CreateWindow( "Aetna", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_VULKAN);
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
 	texture = SDL_CreateTexture
 	(
