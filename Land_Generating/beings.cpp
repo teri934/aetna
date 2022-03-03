@@ -44,7 +44,19 @@ void Sheep::Simulate() {
 }
 
 void VioletFlower::Simulate() {
+	for (int i = -3; i <= 3; ++i)
+	{
+		for (int j = -3; j <= 3; ++j) {
 
+			Point direction = Point(i, j);
+			ListBeings being = world->GetResultBeing(this, direction);
+
+			if (being == ListBeings::SHEEP) {
+				world->EraseBeing(this, &world->nature);
+				return;
+			}
+		}
+	}
 }
 
 void RedFlower::Simulate() {

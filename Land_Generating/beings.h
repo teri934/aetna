@@ -65,7 +65,7 @@ public:
 private:
 	bool was_other_sheep = false;
 	int interval = 10;
-	int age = 10;
+	int age = 50;
 	const int STEP = 8;
 	const int RANGE = 4;
 };

@@ -15,6 +15,10 @@ int main( int argc, char* args[] )
 
 	//Create window
 	window = SDL_CreateWindow( "Aetna", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_VULKAN);
+
+	SDL_Surface* icon = SDL_LoadBMP("images/volcano_mini.bmp");
+	SDL_SetWindowIcon(window, icon);
+
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
 	texture = SDL_CreateTexture
 	(

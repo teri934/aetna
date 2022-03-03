@@ -72,6 +72,7 @@ public:
 	void RenderBeings();
 	void Simulate();
 	Point GetResultPosition(Being* being, const Point& direction);
+	ListBeings GetResultBeing(Being* being, Point& direction);
 	void EraseBeing(Being* being, vector<being_ptr>* arr);
 };
 
