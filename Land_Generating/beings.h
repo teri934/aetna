@@ -29,7 +29,7 @@ protected:
 	/*
 	*moves being from one point to another
 	*/
-	virtual void Move(const Point& direction);
+	virtual void Move(const Point& direction, ListBeings being);
 public:
 	Point Position;
 
@@ -62,6 +62,12 @@ public:
 	ListBeings GetBeing() override { return ListBeings::SHEEP; }
 	Size GetSize() override { return Size(36, 18); }
 	void Simulate() override;
+private:
+	bool was_other_sheep = false;
+	int interval = 10;
+	int age = 10;
+	const int STEP = 8;
+	const int RANGE = 4;
 };
 
 class VioletFlower : public Being {
@@ -92,7 +98,7 @@ public:
 	void Simulate() override;
 
 protected:
-	void Move(const Point& direction) override {this->Position = Position;}
+	void Move(const Point& direction, ListBeings being) override {this->Position = Position;}
 };
 
 #endif // !BEINGS_H_

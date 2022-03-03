@@ -38,16 +38,18 @@ private:
 	void generateTextures();
 
 	vector<vector<float>> terrain;
-	vector<being_ptr> nature;
-	vector<being_ptr> animals;
 	void generateTerrain(vector<vector<float>>* terrain);
 	void generateDefaultBeings();
 	void renderArray(vector<being_ptr>* arr);
+
+
 public:
 	size_t HEIGHT;
 	size_t WIDTH;
 	Size WorldSize;
 	vector<vector<ListBeings>> beings;
+	vector<being_ptr> nature;
+	vector<being_ptr> animals;
 
 	World(size_t HEIGHT, size_t WIDTH, SDL_Renderer* renderer) : HEIGHT(HEIGHT), WIDTH(WIDTH), renderer(renderer){
 		srand((unsigned int)time(NULL));
@@ -70,6 +72,7 @@ public:
 	void RenderBeings();
 	void Simulate();
 	Point GetResultPosition(Being* being, const Point& direction);
+	void EraseBeing(Being* being, vector<being_ptr>* arr);
 };
 
 #endif
