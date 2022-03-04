@@ -25,6 +25,8 @@ enum class ListBeings : Uint8 {
 class Being {
 protected:
 	World* world = NULL;
+	const int STEP = 8;
+	const int RANGE = 4;
 
 	/*
 	*moves being from one point to another
@@ -66,22 +68,35 @@ private:
 	bool was_other_sheep = false;
 	int interval = 10;
 	int age = 50;
-	const int STEP = 8;
-	const int RANGE = 4;
+
+	const int RED_ADD = 25;
+	const int VIOLET_ADD = 5;
+	const int INTERVAL = 10;
+
+	void modifySheepArray(int number, const Point& position);
 };
 
-class VioletFlower : public Being {
+class Flower : public Being {
 public:
-	VioletFlower(const Point& position, World* world) : Being(position, world) {}
+	Flower(const Point& position, World* world) : Being(position, world) {}
+	being_ptr Clone() override { return std::make_unique<Flower>(*this); }
+	ListBeings GetBeing() override { return ListBeings::EMPTY; }
+	Size GetSize() override { return Size(0, 0); }
+	void Simulate() override;
+};
+
+class VioletFlower : public Flower {
+public:
+	VioletFlower(const Point& position, World* world) : Flower(position, world) {}
 	being_ptr Clone() override { return std::make_unique<VioletFlower>(*this); }
 	ListBeings GetBeing() override { return ListBeings::VIOLET_FLOWER; }
 	Size GetSize() override { return Size(24, 12); }
 	void Simulate() override;
 };
 
-class RedFlower : public Being {
+class RedFlower : public Flower {
 public:
-	RedFlower(const Point& position, World* world) : Being(position, world) {}
+	RedFlower(const Point& position, World* world) : Flower(position, world) {}
 	being_ptr Clone() override { return std::make_unique<RedFlower>(*this); }
 	ListBeings GetBeing() override { return ListBeings::RED_FLOWER; }
 	Size GetSize() override { return Size(24, 12); }

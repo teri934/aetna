@@ -30,23 +30,35 @@ void Sheep::Simulate() {
 			world->animals.push_back(make_unique<Sheep>(Point(result_position.x, result_position.y), world));
 			world->beings[result_position.y][result_position.x] = ListBeings::SHEEP;
 			was_other_sheep = false;
-			interval = 10;
+			interval = INTERVAL;
 		}
 
 		Move(direction, ListBeings::SHEEP);    //sheep moves to new location
 	}
-	else if (being == ListBeings::SHEEP) {
+	else if (being == ListBeings::SHEEP)
 		was_other_sheep = true;
-	}
+	else if (being == ListBeings::VIOLET_FLOWER)   //flower is eaten when calling Simulate() of VioeltFlower
+		modifySheepArray(VIOLET_ADD, result_position);
+	else if (being == ListBeings::RED_FLOWER)
+		modifySheepArray(RED_ADD, result_position);
+
 
 	--interval;
 	--age;
 }
 
-void VioletFlower::Simulate() {
-	for (int i = -3; i <= 3; ++i)
+/*
+* increase sheep age and change global being in array beings
+*/
+void Sheep::modifySheepArray(int number, const Point& position) {
+	age += number;
+	world->beings[position.y][position.x] = ListBeings::SHEEP;
+}
+
+void Flower::Simulate() {
+	for (int i = -RANGE; i <= RANGE; ++i)
 	{
-		for (int j = -3; j <= 3; ++j) {
+		for (int j = -RANGE; j <= RANGE; ++j) {
 
 			Point direction = Point(i, j);
 			ListBeings being = world->GetResultBeing(this, direction);
@@ -59,8 +71,13 @@ void VioletFlower::Simulate() {
 	}
 }
 
-void RedFlower::Simulate() {
 
+void VioletFlower::Simulate() {
+	Flower::Simulate();
+}
+
+void RedFlower::Simulate() {
+	Flower::Simulate();
 }
 
 void Volcano::Simulate() {

@@ -142,7 +142,7 @@ ListBeings World::GetResultBeing(Being* being, Point& direction) {
 */
 void World::EraseBeing(Being* being, vector<being_ptr>* arr) {
 	beings[being->Position.y][being->Position.x] = ListBeings::EMPTY;
-	for (int i = (*arr).size() - 1; i > -1; --i)
+	for (int i = ((int)(*arr).size() - 1); i > -1; --i)
 	{
 		if ((*arr)[i]->Position.x == being->Position.x && (*arr)[i]->Position.y == being->Position.y) {
 			(*arr).erase((*arr).begin() + i);
