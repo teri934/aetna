@@ -64,6 +64,23 @@ int main( int argc, char* args[] )
 
 			last = current;
 		}
+
+
+		while (SDL_PollEvent(&event)) {
+			switch (event.type) {
+			case SDL_QUIT:
+				cycle = true;
+			case SDL_MOUSEBUTTONDOWN:
+				if (event.button.button == SDL_BUTTON_LEFT) {
+					std::cout << "Spawning..." << std::endl;
+					//world.SpawnCurrent(static_cast<uint32_t>(event.button.x) / GRANULARITY, static_cast<uint32_t>(event.button.y) / GRANULARITY);
+				}
+				break;
+			case SDL_MOUSEWHEEL:
+				//world.ChangeCurrentActor(event.wheel.y > 0);
+				break;
+			}
+		}
 	}
 
 

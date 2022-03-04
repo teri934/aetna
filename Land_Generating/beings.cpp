@@ -10,9 +10,17 @@ void Being::Move(const Point& direction, ListBeings being) {
 
 
 void Sheep::Simulate() {
-	if (age == 0) {       //sheep dies and new flower emerges
-		world->nature.push_back(make_unique<VioletFlower>(Point(Position.x, Position.y), world));
-		world->beings[Position.y][Position.x] = ListBeings::VIOLET_FLOWER;
+	if (age == 0) {       //sheep dies and new flower emerges, either red or violet
+		int prob = rand() % (INTERVAL * RANGE);
+		if (interval != 1) {
+			world->nature.push_back(make_unique<VioletFlower>(Point(Position.x, Position.y), world));
+			world->beings[Position.y][Position.x] = ListBeings::VIOLET_FLOWER;
+		}
+		else {
+			world->nature.push_back(make_unique<RedFlower>(Point(Position.x, Position.y), world));
+			world->beings[Position.y][Position.x] = ListBeings::RED_FLOWER;
+		}
+
 		world->EraseBeing(this, &world->animals);
 		return;
 	}
@@ -69,14 +77,26 @@ void Flower::Simulate() {
 			}
 		}
 	}
+
+	--age;
 }
 
 
 void VioletFlower::Simulate() {
+	if (age == 0) {       //VioletFlower dies
+		world->beings[Position.y][Position.x] = ListBeings::EMPTY;
+		world->EraseBeing(this, &world->nature);
+		return;
+	}
 	Flower::Simulate();
 }
 
 void RedFlower::Simulate() {
+	if (age == 0) {       //RedFlower dies
+		world->beings[Position.y][Position.x] = ListBeings::EMPTY;
+		world->EraseBeing(this, &world->nature);
+		return;
+	}
 	Flower::Simulate();
 }
 

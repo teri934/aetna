@@ -27,6 +27,7 @@ protected:
 	World* world = NULL;
 	const int STEP = 8;
 	const int RANGE = 4;
+	int age = 0;
 
 	/*
 	*moves being from one point to another
@@ -35,7 +36,6 @@ protected:
 public:
 	Point Position;
 
-	virtual being_ptr Clone() = 0;
 
 	/*
 	* gets ID for type of being
@@ -60,7 +60,6 @@ public:
 class Sheep : public Being {
 public:
 	Sheep(const Point& position, World* world) : Being(position, world) {}
-	being_ptr Clone() override { return std::make_unique<Sheep>(*this); }
 	ListBeings GetBeing() override { return ListBeings::SHEEP; }
 	Size GetSize() override { return Size(36, 18); }
 	void Simulate() override;
@@ -76,19 +75,20 @@ private:
 	void modifySheepArray(int number, const Point& position);
 };
 
-class Flower : public Being {
+class Flower : public Being {   //common predecessor for VioletFlower and RedFlower
 public:
 	Flower(const Point& position, World* world) : Being(position, world) {}
-	being_ptr Clone() override { return std::make_unique<Flower>(*this); }
 	ListBeings GetBeing() override { return ListBeings::EMPTY; }
 	Size GetSize() override { return Size(0, 0); }
 	void Simulate() override;
+
+protected:
+	int age = 20;
 };
 
 class VioletFlower : public Flower {
 public:
 	VioletFlower(const Point& position, World* world) : Flower(position, world) {}
-	being_ptr Clone() override { return std::make_unique<VioletFlower>(*this); }
 	ListBeings GetBeing() override { return ListBeings::VIOLET_FLOWER; }
 	Size GetSize() override { return Size(24, 12); }
 	void Simulate() override;
@@ -97,7 +97,6 @@ public:
 class RedFlower : public Flower {
 public:
 	RedFlower(const Point& position, World* world) : Flower(position, world) {}
-	being_ptr Clone() override { return std::make_unique<RedFlower>(*this); }
 	ListBeings GetBeing() override { return ListBeings::RED_FLOWER; }
 	Size GetSize() override { return Size(24, 12); }
 	void Simulate() override;
@@ -107,7 +106,6 @@ public:
 class Volcano : public Being {
 public:
 	Volcano(const Point& position, World* world) : Being(position, world) {}
-	being_ptr Clone() override { return std::make_unique<Volcano>(*this); }
 	ListBeings GetBeing() override { return ListBeings::VOLCANO; }
 	Size GetSize() override { return Size(32, 16); }
 	void Simulate() override;
