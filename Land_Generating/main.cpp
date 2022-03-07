@@ -34,7 +34,6 @@ int main( int argc, char* args[] )
 
 	World world = World(SCREEN_HEIGHT, SCREEN_WIDTH, renderer);;
 	unsigned int current, last = 0;
-
 	world.LockAndRender(texture);
 
 	bool cycle = true;
