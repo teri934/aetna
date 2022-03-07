@@ -3,6 +3,25 @@
 using namespace siv;
 
 /*
+* locking texture so the values of pixels in interal buffer can be updated
+*/
+void World::LockAndRender(SDL_Texture* texture) {
+
+	unsigned char* pixels = nullptr;
+	int pitch = 0;
+	SDL_LockTexture
+	(
+		texture,
+		NULL,
+		reinterpret_cast<void**>(&pixels),
+		&pitch
+	);
+	RenderTerrain(pixels);
+	SDL_UnlockTexture(texture);
+	SDL_RenderCopy(renderer, texture, NULL, NULL);
+}
+
+/*
 * using perlin noise generates terrain with higher and lower regions
 */
 void World::generateTerrain(vector<vector<float>>* terrain) {
@@ -63,7 +82,7 @@ void World::generateDefaultBeings() {
 				beings[y][x] = ListBeings::VIOLET_FLOWER;
 			}
 			else if (value < LOW_PROB && terrain[y][x] < HIGHLAND) {
-				nature.push_back(make_unique<Volcano>(Point(x, y), this));
+				volcanos.push_back(make_unique<Volcano>(Point(x, y), this));
 				beings[y][x] = ListBeings::VOLCANO;
 			}
 			else
@@ -96,6 +115,7 @@ void World::RenderTerrain(unsigned char* target) {
 void World::RenderBeings() {
 
 	renderArray(&nature);
+	renderArray(&volcanos);
 	renderArray(&animals);
 }
 

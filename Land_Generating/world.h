@@ -50,6 +50,7 @@ public:
 	vector<vector<ListBeings>> beings;
 	vector<being_ptr> nature;
 	vector<being_ptr> animals;
+	vector<being_ptr> volcanos;
 
 	World(size_t HEIGHT, size_t WIDTH, SDL_Renderer* renderer) : HEIGHT(HEIGHT), WIDTH(WIDTH), renderer(renderer){
 		srand((unsigned int)time(NULL));
@@ -74,6 +75,7 @@ public:
 	Point GetResultPosition(Being* being, const Point& direction);
 	ListBeings GetResultBeing(Being* being, Point& direction);
 	void EraseBeing(Being* being, vector<being_ptr>* arr);
+	void LockAndRender(SDL_Texture* texture);
 };
 
 #endif
