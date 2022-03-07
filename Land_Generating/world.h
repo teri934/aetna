@@ -41,6 +41,7 @@ private:
 	void generateTerrain(vector<vector<float>>* terrain);
 	void generateDefaultBeings();
 	void renderArray(vector<being_ptr>* arr);
+	void checkVolcanos(unsigned int x, unsigned int y);
 
 
 public:
@@ -76,6 +77,7 @@ public:
 	ListBeings GetResultBeing(Being* being, Point& direction);
 	void EraseBeing(Being* being, vector<being_ptr>* arr);
 	void LockAndRender(SDL_Texture* texture);
+	void CheckClick(unsigned int x, unsigned int y);
 };
 
 #endif

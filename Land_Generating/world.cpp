@@ -18,7 +18,6 @@ void World::LockAndRender(SDL_Texture* texture) {
 	);
 	RenderTerrain(pixels);
 	SDL_UnlockTexture(texture);
-	SDL_RenderCopy(renderer, texture, NULL, NULL);
 }
 
 /*
@@ -169,5 +168,34 @@ void World::EraseBeing(Being* being, vector<being_ptr>* arr) {
 			return;
 		}
 
+	}
+}
+
+void World::CheckClick(unsigned int x, unsigned int y) {
+	checkVolcanos(x, y);
+}
+
+
+/*
+* checking if user clicked on a volcano
+* then calling function for its explosion
+*/
+void World::checkVolcanos(unsigned int x, unsigned int y) {
+	if (volcanos.size() == 0)
+		return;
+
+	int width = volcanos[0]->GetSize().width >> 1;
+	int height = volcanos[0]->GetSize().height >> 1;
+
+	int x_min = x - width;
+	int x_max = x + width;
+	int y_min = y - height;
+	int y_max = y + height;
+
+	for (size_t i = 0; i < volcanos.size(); i++)
+	{
+		if (volcanos[i]->Position.x >= x_min && volcanos[i]->Position.x <= x_max && volcanos[i]->Position.y >= y_min && volcanos[i]->Position.y <= y_max) {
+			std::cout << "Click on volcano!\n";
+		}
 	}
 }

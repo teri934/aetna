@@ -66,13 +66,15 @@ public:
 private:
 	bool was_other_sheep = false;
 	int interval = 10;
-	int age = 50;
+	int age = 100;
 
 	const int RED_ADD = 25;
 	const int VIOLET_ADD = 5;
-	const int INTERVAL = 10;
+	const int INTERVAL = 40;
 
 	void modifySheepArray(int number, const Point& position);
+	void decideDeathFlowerAndErase();
+	bool checkLivingSpace();
 };
 
 class Flower : public Being {   //common predecessor for VioletFlower and RedFlower

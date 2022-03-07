@@ -36,6 +36,7 @@ int main( int argc, char* args[] )
 	unsigned int current, last = 0;
 	world.LockAndRender(texture);
 
+	//main program loop
 	bool cycle = true;
 	while (cycle) {
 		SDL_Event event;
@@ -52,15 +53,15 @@ int main( int argc, char* args[] )
 			last = current;
 		}
 
-
+		//events from user
 		while (SDL_PollEvent(&event)) {
 			switch (event.type) {
 			case SDL_QUIT:
 				cycle = false;
+				break;
 			case SDL_MOUSEBUTTONDOWN:
 				if (event.button.button == SDL_BUTTON_LEFT) {
-					std::cout << static_cast<uint32_t>(event.button.x) << std::endl;
-					//world.SpawnCurrent(static_cast<uint32_t>(event.button.x) / GRANULARITY, static_cast<uint32_t>(event.button.y) / GRANULARITY);
+					world.CheckClick(static_cast<uint32_t>(event.button.x), static_cast<uint32_t>(event.button.y));
 				}
 				break;
 			}
