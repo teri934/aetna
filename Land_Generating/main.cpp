@@ -19,7 +19,7 @@ int main( int argc, char* args[] )
 	SDL_Surface* icon = SDL_LoadBMP("images/volcano_mini.bmp");
 	SDL_SetWindowIcon(window, icon);
 
-	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 	texture = SDL_CreateTexture
 	(
 		renderer,
@@ -35,6 +35,8 @@ int main( int argc, char* args[] )
 	World world = World(SCREEN_HEIGHT, SCREEN_WIDTH, renderer);;
 	unsigned int current, last = 0;
 
+	world.LockAndRender(texture);
+
 	bool cycle = true;
 	while (cycle) {
 		SDL_Event event;
@@ -42,22 +44,7 @@ int main( int argc, char* args[] )
 
 		if (current - last > frame)
 		{
-			unsigned char* pixels = nullptr;
-			int pitch = 0;
-
 			world.Simulate();
-
-			SDL_LockTexture
-			(
-				texture,
-				NULL,
-				reinterpret_cast<void**>(&pixels),
-				&pitch
-			);
-			world.RenderTerrain(pixels);
-			SDL_RenderCopy(renderer, texture, NULL, NULL);
-
-			SDL_UnlockTexture(texture);
 
 			world.RenderBeings();
 			SDL_RenderPresent(renderer);
@@ -69,7 +56,7 @@ int main( int argc, char* args[] )
 		while (SDL_PollEvent(&event)) {
 			switch (event.type) {
 			case SDL_QUIT:
-				cycle = true;
+				cycle = false;
 			case SDL_MOUSEBUTTONDOWN:
 				if (event.button.button == SDL_BUTTON_LEFT) {
 					std::cout << "Spawning..." << std::endl;
