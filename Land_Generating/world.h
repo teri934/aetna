@@ -48,10 +48,11 @@ public:
 	size_t HEIGHT;
 	size_t WIDTH;
 	Size WorldSize;
-	vector<vector<ListBeings>> beings;
-	vector<being_ptr> nature;
-	vector<being_ptr> animals;
-	vector<being_ptr> volcanos;
+	vector<vector<ListBeings>> Beings;
+	vector<being_ptr> Nature;
+	vector<being_ptr> Animals;
+	vector<being_ptr> Volcanos;
+	vector<vector<bool>> ExplosionTerrain;
 
 	World(size_t HEIGHT, size_t WIDTH, SDL_Renderer* renderer) : HEIGHT(HEIGHT), WIDTH(WIDTH), renderer(renderer){
 		srand((unsigned int)time(NULL));
@@ -61,10 +62,11 @@ public:
 		fx = WIDTH / frequency;
 		fy = HEIGHT / frequency;
 
+		ExplosionTerrain.resize(HEIGHT, vector<bool>(WIDTH));
 		terrain.resize(HEIGHT, vector<float>(WIDTH));
 		generateTerrain(&terrain);
 
-		beings.resize(HEIGHT, vector<ListBeings>(WIDTH));
+		Beings.resize(HEIGHT, vector<ListBeings>(WIDTH));
 
 		generateDefaultBeings();
 		generateTextures();

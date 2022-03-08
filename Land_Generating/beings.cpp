@@ -3,9 +3,9 @@
 
 
 void Being::Move(const Point& direction, ListBeings being) {
-	world->beings[Position.y][Position.x] = ListBeings::EMPTY;
+	world->Beings[Position.y][Position.x] = ListBeings::EMPTY;
 	Position = (Position + direction) % world->WorldSize;
-	world->beings[Position.y][Position.x] = being;
+	world->Beings[Position.y][Position.x] = being;
 }
 
 
@@ -21,13 +21,13 @@ void Sheep::Simulate() {
 
 	Point direction = Point(x_direction, y_direction);
 	Point result_position = world->GetResultPosition(this, direction);
-	ListBeings being = world->beings[result_position.y][result_position.x];
+	ListBeings being = world->Beings[result_position.y][result_position.x];
 
 	if (being == ListBeings::EMPTY && !checkBeing(direction)) {
 
 		if (was_other_sheep && interval < 0 && age > INTERVAL) {     //new sheep is "born" if in tha last step two sheep were close enough and some time has passed and is not too old
-			world->animals.push_back(make_unique<Sheep>(Point(result_position.x, result_position.y), world));
-			world->beings[result_position.y][result_position.x] = ListBeings::SHEEP;
+			world->Animals.push_back(make_unique<Sheep>(Point(result_position.x, result_position.y), world));
+			world->Beings[result_position.y][result_position.x] = ListBeings::SHEEP;
 			was_other_sheep = false;
 			interval = INTERVAL;
 		}
@@ -54,15 +54,15 @@ void Sheep::decideDeathFlowerAndErase() {
 
 	int value = rand() % (INTERVAL * RANGE);
 	if (value > 10) {
-		world->nature.push_back(make_unique<VioletFlower>(Point(Position.x, Position.y), world));
-		world->beings[Position.y][Position.x] = ListBeings::VIOLET_FLOWER;
+		world->Nature.push_back(make_unique<VioletFlower>(Point(Position.x, Position.y), world));
+		world->Beings[Position.y][Position.x] = ListBeings::VIOLET_FLOWER;
 	}
 	else {
-		world->nature.push_back(make_unique<RedFlower>(Point(Position.x, Position.y), world));
-		world->beings[Position.y][Position.x] = ListBeings::RED_FLOWER;
+		world->Nature.push_back(make_unique<RedFlower>(Point(Position.x, Position.y), world));
+		world->Beings[Position.y][Position.x] = ListBeings::RED_FLOWER;
 	}
 
-	world->EraseBeing(this, &world->animals);
+	world->EraseBeing(this, &world->Animals);
 }
 
 /*
@@ -76,7 +76,7 @@ bool Sheep::checkBeing(Point& result_direction) {
 		{
 			Point direction = Point(i, j);
 			Point result_position = world->GetResultPosition(this, result_direction + direction);
-			ListBeings being = world->beings[result_position.y][result_position.x];
+			ListBeings being = world->Beings[result_position.y][result_position.x];
 
 			if (being == ListBeings::VOLCANO) {
 				std::cout << "too close\n";
@@ -100,7 +100,7 @@ bool Sheep::checkLivingSpace() {
 		{
 			Point direction = Point(i, j);
 			Point result_position = world->GetResultPosition(this, direction);
-			ListBeings being = world->beings[result_position.y][result_position.x];
+			ListBeings being = world->Beings[result_position.y][result_position.x];
 
 			if (being != ListBeings::SHEEP)
 				return true;
@@ -115,11 +115,9 @@ bool Sheep::checkLivingSpace() {
 */
 bool Sheep::checkExplosion() {
 
-	ListBeings being = world->beings[Position.y][Position.x];
-	if (being == ListBeings::NO_SHEEP) {
-		std::cout << "erase sheep\n";
+	ListBeings being = world->Beings[Position.y][Position.x];
+	if (being == ListBeings::NO_SHEEP)
 		return true;
-	}
 
 	return false;
 }
@@ -129,7 +127,7 @@ bool Sheep::checkExplosion() {
 */
 void Sheep::modifySheepArray(int number, const Point& position) {
 	age += number;
-	world->beings[position.y][position.x] = ListBeings::SHEEP;
+	world->Beings[position.y][position.x] = ListBeings::SHEEP;
 }
 
 void Flower::Simulate() {
@@ -141,7 +139,7 @@ void Flower::Simulate() {
 			ListBeings being = world->GetResultBeing(this, direction);
 
 			if (being == ListBeings::SHEEP) {
-				world->EraseBeing(this, &world->nature);
+				world->EraseBeing(this, &world->Nature);
 				return;
 			}
 		}
@@ -153,8 +151,8 @@ void Flower::Simulate() {
 
 void VioletFlower::Simulate() {
 	if (age == 0) {       //VioletFlower dies
-		world->beings[Position.y][Position.x] = ListBeings::EMPTY;
-		world->EraseBeing(this, &world->nature);
+		world->Beings[Position.y][Position.x] = ListBeings::EMPTY;
+		world->EraseBeing(this, &world->Nature);
 		return;
 	}
 	Flower::Simulate();
@@ -162,8 +160,8 @@ void VioletFlower::Simulate() {
 
 void RedFlower::Simulate() {
 	if (age == 0) {       //RedFlower dies
-		world->beings[Position.y][Position.x] = ListBeings::EMPTY;
-		world->EraseBeing(this, &world->nature);
+		world->Beings[Position.y][Position.x] = ListBeings::EMPTY;
+		world->EraseBeing(this, &world->Nature);
 		return;
 	}
 	Flower::Simulate();
@@ -173,8 +171,6 @@ void Volcano::Simulate() {
 
 	if (exploding && currentBorder < BORDER) {
 		int new_current_border = currentBorder + ADD_WAWE;
-		int x_position = Position.x;
-		int y_position = Position.y;
 
 		for(int i = -currentBorder; i < new_current_border; ++i)
 		{
@@ -182,12 +178,10 @@ void Volcano::Simulate() {
 			{
 				Point direction = Point(i, j);
 				Point result_position = world->GetResultPosition(this, direction);
-				ListBeings being = world->beings[result_position.y][result_position.x];
+				ListBeings being = world->Beings[result_position.y][result_position.x];
 
-				if (being == ListBeings::SHEEP) {
-					world->beings[result_position.y][result_position.x] = ListBeings::NO_SHEEP;
-					std::cout << "no sheep\n";
-				}
+				if (being == ListBeings::SHEEP)
+					world->Beings[result_position.y][result_position.x] = ListBeings::NO_SHEEP;
 			}
 		}
 

@@ -73,23 +73,23 @@ void World::generateDefaultBeings() {
 
 
 			if (value < LOW_PROB && terrain[y][x] > 0.3f && terrain[y][x] < LOWLAND) {
-				nature.push_back(make_unique<RedFlower>(Point(x, y), this));
-				beings[y][x] = ListBeings::RED_FLOWER;
+				Nature.push_back(make_unique<RedFlower>(Point(x, y), this));
+				Beings[y][x] = ListBeings::RED_FLOWER;
 			}
 			else if (value < MID_PROB && terrain[y][x] > MIDLAND) {
-				animals.push_back(make_unique<Sheep>(Point(x, y), this));
-				beings[y][x] = ListBeings::SHEEP;
+				Animals.push_back(make_unique<Sheep>(Point(x, y), this));
+				Beings[y][x] = ListBeings::SHEEP;
 			}
 			else if (value < HIGH_PROB && terrain[y][x] > LOWLAND) {
-				nature.push_back(make_unique<VioletFlower>(Point(x, y), this));
-				beings[y][x] = ListBeings::VIOLET_FLOWER;
+				Nature.push_back(make_unique<VioletFlower>(Point(x, y), this));
+				Beings[y][x] = ListBeings::VIOLET_FLOWER;
 			}
-			else if (value < LOW_PROB && terrain[y][x] < HIGHLAND) {
-				volcanos.push_back(make_unique<Volcano>(Point(x, y), this));
-				beings[y][x] = ListBeings::VOLCANO;
+			else if (value < MID_PROB && terrain[y][x] < HIGHLAND) {
+				Volcanos.push_back(make_unique<Volcano>(Point(x, y), this));
+				Beings[y][x] = ListBeings::VOLCANO;
 			}
 			else
-				beings[y][x] = ListBeings::EMPTY;
+				Beings[y][x] = ListBeings::EMPTY;
 
 		}
 	}
@@ -117,9 +117,9 @@ void World::RenderTerrain(unsigned char* target) {
 
 void World::RenderBeings() {
 
-	renderArray(&volcanos);
-	renderArray(&nature);
-	renderArray(&animals);
+	renderArray(&Volcanos);
+	renderArray(&Nature);
+	renderArray(&Animals);
 }
 
 /*
@@ -143,14 +143,14 @@ void World::renderArray(vector<being_ptr>* arr){
 * for every being calls its simulate method
 */
 void World::Simulate() {
-	for (size_t i = 0; i < nature.size(); ++i)
-		nature[i]->Simulate();
+	for (size_t i = 0; i < Nature.size(); ++i)
+		Nature[i]->Simulate();
 
-	for (size_t i = 0; i < animals.size(); ++i)
-		animals[i]->Simulate();
+	for (size_t i = 0; i < Animals.size(); ++i)
+		Animals[i]->Simulate();
 
-	for (size_t i = 0; i < volcanos.size(); ++i)
-		volcanos[i]->Simulate();
+	for (size_t i = 0; i < Volcanos.size(); ++i)
+		Volcanos[i]->Simulate();
 }
 
 
@@ -160,14 +160,14 @@ Point World::GetResultPosition(Being* being, const Point& direction) {
 
 ListBeings World::GetResultBeing(Being* being, Point& direction) {
 	Point result_position = GetResultPosition(being, direction);
-	return beings[result_position.y][result_position.x];
+	return Beings[result_position.y][result_position.x];
 }
 
 /*
 * erasing being from the vector of current "alive" animals so it is not rendered again
 */
 void World::EraseBeing(Being* being, vector<being_ptr>* arr) {
-	beings[being->Position.y][being->Position.x] = ListBeings::EMPTY;
+	Beings[being->Position.y][being->Position.x] = ListBeings::EMPTY;
 	for (int i = ((int)(*arr).size() - 1); i > -1; --i)
 	{
 		if ((*arr)[i]->Position.x == being->Position.x && (*arr)[i]->Position.y == being->Position.y) {
@@ -188,22 +188,20 @@ void World::CheckClick(unsigned int x, unsigned int y) {
 * then calling function for its explosion
 */
 void World::checkVolcanos(unsigned int x, unsigned int y) {
-	if (volcanos.size() == 0)
+	if (Volcanos.size() == 0)
 		return;
 
-	int width = volcanos[0]->GetSize().width >> 1;
-	int height = volcanos[0]->GetSize().height >> 1;
+	int width = Volcanos[0]->GetSize().width >> 1;
+	int height = Volcanos[0]->GetSize().height >> 1;
 
 	int x_min = x - width;
 	int x_max = x + width;
 	int y_min = y - height;
 	int y_max = y + height;
 
-	for (size_t i = 0; i < volcanos.size(); i++)
+	for (size_t i = 0; i < Volcanos.size(); i++)
 	{
-		if (volcanos[i]->Position.x >= x_min && volcanos[i]->Position.x <= x_max && volcanos[i]->Position.y >= y_min && volcanos[i]->Position.y <= y_max) {
-			std::cout << "Click on volcano!\n";
-			dynamic_cast<Volcano*>(volcanos[i].get())->Explode();
-		}
+		if (Volcanos[i]->Position.x >= x_min && Volcanos[i]->Position.x <= x_max && Volcanos[i]->Position.y >= y_min && Volcanos[i]->Position.y <= y_max)
+			dynamic_cast<Volcano*>(Volcanos[i].get())->Explode();
 	}
 }
