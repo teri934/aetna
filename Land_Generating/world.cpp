@@ -16,9 +16,12 @@ void World::LockAndRender(SDL_Texture* texture) {
 		reinterpret_cast<void**>(&pixels),
 		&pitch
 	);
+
 	RenderTerrain(pixels);
+
 	SDL_UnlockTexture(texture);
 }
+
 
 /*
 * using perlin noise generates terrain with higher and lower regions
@@ -56,7 +59,8 @@ void World::generateTextures() {
 void World::generateDefaultBeings() {
 
 	const float LOWLAND = 0.6f;
-	const float HIGHLAND = 0.3f;
+	const float MIDLAND = 0.4f;
+	const float HIGHLAND = 0.2f;
 	const float LOW_PROB = SIZE * 0.00001f;
 	const float MID_PROB = SIZE * 0.00005f;
 	const float HIGH_PROB = SIZE * 0.0002f;
@@ -72,7 +76,7 @@ void World::generateDefaultBeings() {
 				nature.push_back(make_unique<RedFlower>(Point(x, y), this));
 				beings[y][x] = ListBeings::RED_FLOWER;
 			}
-			else if (value < MID_PROB && terrain[y][x] > HIGHLAND) {
+			else if (value < MID_PROB && terrain[y][x] > MIDLAND) {
 				animals.push_back(make_unique<Sheep>(Point(x, y), this));
 				beings[y][x] = ListBeings::SHEEP;
 			}
@@ -113,8 +117,8 @@ void World::RenderTerrain(unsigned char* target) {
 
 void World::RenderBeings() {
 
-	renderArray(&nature);
 	renderArray(&volcanos);
+	renderArray(&nature);
 	renderArray(&animals);
 }
 
@@ -144,6 +148,9 @@ void World::Simulate() {
 
 	for (size_t i = 0; i < animals.size(); ++i)
 		animals[i]->Simulate();
+
+	for (size_t i = 0; i < volcanos.size(); ++i)
+		volcanos[i]->Simulate();
 }
 
 
@@ -196,6 +203,7 @@ void World::checkVolcanos(unsigned int x, unsigned int y) {
 	{
 		if (volcanos[i]->Position.x >= x_min && volcanos[i]->Position.x <= x_max && volcanos[i]->Position.y >= y_min && volcanos[i]->Position.y <= y_max) {
 			std::cout << "Click on volcano!\n";
+			dynamic_cast<Volcano*>(volcanos[i].get())->Explode();
 		}
 	}
 }

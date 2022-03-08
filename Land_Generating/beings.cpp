@@ -11,7 +11,7 @@ void Being::Move(const Point& direction, ListBeings being) {
 
 void Sheep::Simulate() {
 
-	if (age == 0 || !checkLivingSpace()) {   //sheep dies and new flower emerges, either red or violet
+	if (age == 0 || !checkLivingSpace() || checkExplosion()) {   //sheep dies and new flower emerges, either red or violet
 		decideDeathFlowerAndErase();
 		return;
 	}
@@ -23,7 +23,7 @@ void Sheep::Simulate() {
 	Point result_position = world->GetResultPosition(this, direction);
 	ListBeings being = world->beings[result_position.y][result_position.x];
 
-	if (being == ListBeings::EMPTY) {
+	if (being == ListBeings::EMPTY && !checkBeing(direction)) {
 
 		if (was_other_sheep && interval < 0 && age > INTERVAL) {     //new sheep is "born" if in tha last step two sheep were close enough and some time has passed and is not too old
 			world->animals.push_back(make_unique<Sheep>(Point(result_position.x, result_position.y), world));
@@ -66,6 +66,29 @@ void Sheep::decideDeathFlowerAndErase() {
 }
 
 /*
+* checking if other volcano is not too close so sheep wouldn't "walk" on it
+*/
+bool Sheep::checkBeing(Point& result_direction) {
+
+	for (int i = -TOO_CLOSE; i < TOO_CLOSE; ++i)
+	{
+		for (int j = -TOO_CLOSE; j < TOO_CLOSE; ++j)
+		{
+			Point direction = Point(i, j);
+			Point result_position = world->GetResultPosition(this, result_direction + direction);
+			ListBeings being = world->beings[result_position.y][result_position.x];
+
+			if (being == ListBeings::VOLCANO) {
+				std::cout << "too close\n";
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+/*
 * checking if at least one neighboring field (pixel) is sheep-free
 * else not enough living space -> return false
 */
@@ -82,6 +105,20 @@ bool Sheep::checkLivingSpace() {
 			if (being != ListBeings::SHEEP)
 				return true;
 		}
+	}
+
+	return false;
+}
+
+/*
+* checking if the current sheep died because of explosion
+*/
+bool Sheep::checkExplosion() {
+
+	ListBeings being = world->beings[Position.y][Position.x];
+	if (being == ListBeings::NO_SHEEP) {
+		std::cout << "erase sheep\n";
+		return true;
 	}
 
 	return false;
@@ -134,4 +171,36 @@ void RedFlower::Simulate() {
 
 void Volcano::Simulate() {
 
+	if (exploding && currentBorder < BORDER) {
+		int new_current_border = currentBorder + ADD_WAWE;
+		int x_position = Position.x;
+		int y_position = Position.y;
+
+		for(int i = -currentBorder; i < new_current_border; ++i)
+		{
+			for (int j = -currentBorder; j < new_current_border; ++j)
+			{
+				Point direction = Point(i, j);
+				Point result_position = world->GetResultPosition(this, direction);
+				ListBeings being = world->beings[result_position.y][result_position.x];
+
+				if (being == ListBeings::SHEEP) {
+					world->beings[result_position.y][result_position.x] = ListBeings::NO_SHEEP;
+					std::cout << "no sheep\n";
+				}
+			}
+		}
+
+		currentBorder = new_current_border;
+	}
+	else if (exploding)
+		exploding = false;
+}
+
+/*
+* preparing for the explosion
+*/
+void Volcano::Explode() {
+	currentBorder = 0;
+	exploding = true;
 }
