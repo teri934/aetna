@@ -29,7 +29,9 @@ private:
 	double fx;
 	double fy;
 	const float FULL_CIRCLE = 360;
-	const size_t HUE = 111;
+	const float MULTI = 10;
+	const size_t HUE_TERRAIN = 111;
+	const size_t HUE_EXPLOSION = 55;
 
 	SDL_Renderer* renderer;
 
@@ -42,12 +44,14 @@ private:
 	void generateDefaultBeings();
 	void renderArray(vector<being_ptr>* arr);
 	void checkVolcanos(unsigned int x, unsigned int y);
+	void assignPixels(unsigned char* target, size_t y, size_t x, const size_t HUE, float value);
 
 
 public:
 	size_t HEIGHT;
 	size_t WIDTH;
 	Size WorldSize;
+	bool Exploding = false;
 	vector<vector<ListBeings>> Beings;
 	vector<being_ptr> Nature;
 	vector<being_ptr> Animals;
@@ -73,13 +77,15 @@ public:
 	}
 
 	void RenderTerrain(unsigned char* target);
+	void RenderExplosions(unsigned char* target);
 	void RenderBeings();
 	void Simulate();
 	Point GetResultPosition(Being* being, const Point& direction);
 	ListBeings GetResultBeing(Being* being, Point& direction);
 	void EraseBeing(Being* being, vector<being_ptr>* arr);
-	void LockAndRender(SDL_Texture* texture);
+	void LockAndRender(SDL_Texture* texture, bool exploding);
 	void CheckClick(unsigned int x, unsigned int y);
+	bool CheckExplodingVolcanos();
 };
 
 #endif

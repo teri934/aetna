@@ -1,27 +1,7 @@
 #include "world.h"
+#include <algorithm>
 
 using namespace siv;
-
-/*
-* locking texture so the values of pixels in interal buffer can be updated
-*/
-void World::LockAndRender(SDL_Texture* texture) {
-
-	unsigned char* pixels = nullptr;
-	int pitch = 0;
-	SDL_LockTexture
-	(
-		texture,
-		NULL,
-		reinterpret_cast<void**>(&pixels),
-		&pitch
-	);
-
-	RenderTerrain(pixels);
-
-	SDL_UnlockTexture(texture);
-}
-
 
 /*
 * using perlin noise generates terrain with higher and lower regions
@@ -95,6 +75,32 @@ void World::generateDefaultBeings() {
 	}
 }
 
+
+
+
+/*
+* locking texture so the values of pixels in interal buffer can be updated
+*/
+void World::LockAndRender(SDL_Texture* texture, bool exploding) {
+
+	unsigned char* pixels = nullptr;
+	int pitch = 0;
+	SDL_LockTexture
+	(
+		texture,
+		NULL,
+		reinterpret_cast<void**>(&pixels),
+		&pitch
+	);
+
+	if (!exploding)  //choose the rendering
+		RenderTerrain(pixels);
+	else
+		RenderExplosions(pixels);
+
+	SDL_UnlockTexture(texture);
+}
+
 /*
 * applies to perlin-noise-generated terrain colors and writes it to the target bitmap
 */
@@ -104,17 +110,46 @@ void World::RenderTerrain(unsigned char* target) {
 	{
 		for (size_t x = 0; x < WIDTH; ++x)
 		{
-
-			auto floor_value = (floor)(terrain[y][x] * 10.) / 10.;
-			vector<int> colors = Converter::hsvToRgb(HUE / FULL_CIRCLE, 1, floor_value);
-			size_t current_pixel = static_cast<size_t>(3) * (y * WIDTH + x);
-			target[current_pixel + static_cast<uint8_t>(Color::R)] = colors[static_cast<uint8_t>(Color::R)];
-			target[current_pixel + static_cast<uint8_t>(Color::G)] = colors[static_cast<uint8_t>(Color::G)];
-			target[current_pixel + static_cast<uint8_t>(Color::B)] = colors[static_cast<uint8_t>(Color::B)];
+			float floor_value = ((float)(floor)(terrain[y][x] * MULTI)) / MULTI;
+			assignPixels(target, y, x, HUE_TERRAIN, floor_value);
 		}
 	}
 }
 
+
+/*
+* visualizes explosion waves from volcano
+*/
+void World::RenderExplosions(unsigned char* target) {
+	for (size_t y = 0; y < HEIGHT; ++y)
+	{
+		for (size_t x = 0; x < WIDTH; ++x)
+		{
+			if (!ExplosionTerrain[y][x]) {
+				float floor_value = ((float)(floor)(terrain[y][x] * MULTI)) / MULTI;
+				assignPixels(target, y, x, HUE_TERRAIN, floor_value);
+			}
+			else
+				assignPixels(target, y, x, HUE_EXPLOSION, 1);
+		}
+	}
+
+}
+
+/*
+* converts HSV to RGB and low level values to "pixel array" assignement
+*/
+void World::assignPixels(unsigned char* target, size_t y, size_t x, const size_t HUE, float value) {
+	vector<int> colors = Converter::hsvToRgb(HUE / FULL_CIRCLE, 1, value);
+	size_t current_pixel = static_cast<size_t>(3) * (y * WIDTH + x);
+	target[current_pixel + static_cast<uint8_t>(Color::R)] = colors[static_cast<uint8_t>(Color::R)];
+	target[current_pixel + static_cast<uint8_t>(Color::G)] = colors[static_cast<uint8_t>(Color::G)];
+	target[current_pixel + static_cast<uint8_t>(Color::B)] = colors[static_cast<uint8_t>(Color::B)];
+}
+
+/*
+* calls specific rendering function for every array in simulation
+*/
 void World::RenderBeings() {
 
 	renderArray(&Volcanos);
@@ -139,6 +174,9 @@ void World::renderArray(vector<being_ptr>* arr){
 	}
 }
 
+
+
+
 /*
 * for every being calls its simulate method
 */
@@ -153,6 +191,19 @@ void World::Simulate() {
 		Volcanos[i]->Simulate();
 }
 
+bool World::CheckExplodingVolcanos() {
+
+	for (size_t i = 0; i < Volcanos.size(); ++i)
+	{
+		if (dynamic_cast<Volcano*>(Volcanos[i].get())->Exploding)
+			return true;
+	}
+
+	Exploding = false;
+
+	fill(ExplosionTerrain.begin(), ExplosionTerrain.end(), vector<bool>(WIDTH, false));
+	return false;
+}
 
 Point World::GetResultPosition(Being* being, const Point& direction) {
 	return (being->Position + direction) % WorldSize;
@@ -178,10 +229,13 @@ void World::EraseBeing(Being* being, vector<being_ptr>* arr) {
 	}
 }
 
+
+
+
+
 void World::CheckClick(unsigned int x, unsigned int y) {
 	checkVolcanos(x, y);
 }
-
 
 /*
 * checking if user clicked on a volcano

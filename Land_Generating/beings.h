@@ -116,13 +116,13 @@ public:
 	Size GetSize() override { return Size(48, 24); }
 	void Simulate() override;
 	void Explode();
+	bool Exploding = false;
 
 protected:
 	void Move(const Point& direction, ListBeings being) override {this->Position = Position;}
 private:
-	bool exploding = false;
 	int const BORDER = 96;
-	int const ADD_WAWE = 4;
+	int const ADD_WAWE = 48;
 	int currentBorder = 0;
 };
 

@@ -11,7 +11,8 @@ int main( int argc, char* args[] )
 {
 	SDL_Window* window = NULL;
 	SDL_Renderer* renderer;
-	SDL_Texture* texture;
+	SDL_Texture* texture_terrain;
+	SDL_Texture* texture_explosions;
 
 	//Create window
 	window = SDL_CreateWindow( "Aetna", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_VULKAN);
@@ -20,7 +21,14 @@ int main( int argc, char* args[] )
 	SDL_SetWindowIcon(window, icon);
 
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-	texture = SDL_CreateTexture
+	texture_terrain = SDL_CreateTexture
+	(
+		renderer,
+		SDL_PIXELFORMAT_RGB24,
+		SDL_TEXTUREACCESS_STREAMING,
+		SCREEN_WIDTH, SCREEN_HEIGHT
+	);
+	texture_explosions = SDL_CreateTexture
 	(
 		renderer,
 		SDL_PIXELFORMAT_RGB24,
@@ -34,7 +42,7 @@ int main( int argc, char* args[] )
 
 	World world = World(SCREEN_HEIGHT, SCREEN_WIDTH, renderer);;
 	unsigned int current, last = 0;
-	world.LockAndRender(texture);
+	world.LockAndRender(texture_terrain, false);
 
 	//main program loop
 	bool cycle = true;
@@ -46,8 +54,16 @@ int main( int argc, char* args[] )
 		{
 			world.Simulate();
 
-			SDL_RenderCopy(renderer, texture, NULL, NULL);
+			if (world.Exploding) {
+				world.LockAndRender(texture_explosions, true);
+				SDL_RenderCopy(renderer, texture_explosions, NULL, NULL);
+			}
+			else
+				SDL_RenderCopy(renderer, texture_terrain, NULL, NULL);
+
+
 			world.RenderBeings();
+
 			SDL_RenderPresent(renderer);
 
 			last = current;
@@ -69,7 +85,7 @@ int main( int argc, char* args[] )
 	}
 
 
-	SDL_DestroyTexture(texture);
+	SDL_DestroyTexture(texture_terrain);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow( window );
 

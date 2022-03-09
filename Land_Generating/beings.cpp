@@ -169,26 +169,30 @@ void RedFlower::Simulate() {
 
 void Volcano::Simulate() {
 
-	if (exploding && currentBorder < BORDER) {
+	if (Exploding && currentBorder < BORDER) {
 		int new_current_border = currentBorder + ADD_WAWE;
 
-		for(int i = -currentBorder; i < new_current_border; ++i)
+		for(int i = -BORDER; i < BORDER; ++i)
 		{
-			for (int j = -currentBorder; j < new_current_border; ++j)
+			for (int j = -BORDER; j < BORDER; ++j)
 			{
 				Point direction = Point(i, j);
 				Point result_position = world->GetResultPosition(this, direction);
 				ListBeings being = world->Beings[result_position.y][result_position.x];
 
-				if (being == ListBeings::SHEEP)
+				world->ExplosionTerrain[result_position.y][result_position.x] = true;  //mark the fields with explosion
+
+				if (being == ListBeings::SHEEP)  //mark that the sheep should vanish when its Simulate() is called
 					world->Beings[result_position.y][result_position.x] = ListBeings::NO_SHEEP;
 			}
 		}
 
 		currentBorder = new_current_border;
 	}
-	else if (exploding)
-		exploding = false;
+	else if (Exploding) {
+		Exploding = false;
+		world->CheckExplodingVolcanos();
+	}
 }
 
 /*
@@ -196,5 +200,6 @@ void Volcano::Simulate() {
 */
 void Volcano::Explode() {
 	currentBorder = 0;
-	exploding = true;
+	Exploding = true;
+	world->Exploding = true;
 }
