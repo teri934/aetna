@@ -11,8 +11,8 @@ void Being::Move(const Point& direction, ListBeings being) {
 
 void Sheep::Simulate() {
 
-	if (age == 0 || !checkLivingSpace() || checkExplosion()) {   //sheep dies and new flower emerges, either red or violet
-		decideDeathFlowerAndErase();
+	if (age == 0 || !checkLivingSpace() || checkExplosion()) {   //sheep dies and cross emerges
+		createCross();
 		return;
 	}
 
@@ -47,22 +47,10 @@ void Sheep::Simulate() {
 }
 
 
-/*
-* choosig which flower grows after sheep's death
-*/
-void Sheep::decideDeathFlowerAndErase() {
+void Sheep::createCross() {
 
-	int value = rand() % (INTERVAL * RANGE);
-	if (value > 10) {
-		world->Nature.push_back(make_unique<VioletFlower>(Point(Position.x, Position.y), world));
-		world->Beings[Position.y][Position.x] = ListBeings::VIOLET_FLOWER;
-	}
-	else {
-		world->Nature.push_back(make_unique<RedFlower>(Point(Position.x, Position.y), world));
-		world->Beings[Position.y][Position.x] = ListBeings::RED_FLOWER;
-	}
-
-	world->EraseBeing(this, &world->Animals);
+	world->Objects.push_back(make_unique<Cross>(Point(Position.x, Position.y), world));
+	world->EraseBeing(this, &world->Animals, ListBeings::CROSS);
 }
 
 /*
@@ -78,10 +66,8 @@ bool Sheep::checkBeing(Point& result_direction) {
 			Point result_position = world->GetResultPosition(this, result_direction + direction);
 			ListBeings being = world->Beings[result_position.y][result_position.x];
 
-			if (being == ListBeings::VOLCANO) {
-				std::cout << "too close\n";
+			if (being == ListBeings::VOLCANO)
 				return true;
-			}
 		}
 	}
 
@@ -139,7 +125,7 @@ void Flower::Simulate() {
 			ListBeings being = world->GetResultBeing(this, direction);
 
 			if (being == ListBeings::SHEEP) {
-				world->EraseBeing(this, &world->Nature);
+				world->EraseBeing(this, &world->Nature, ListBeings::EMPTY);
 				return;
 			}
 		}
@@ -151,8 +137,7 @@ void Flower::Simulate() {
 
 void VioletFlower::Simulate() {
 	if (age == 0) {       //VioletFlower dies
-		world->Beings[Position.y][Position.x] = ListBeings::EMPTY;
-		world->EraseBeing(this, &world->Nature);
+		world->EraseBeing(this, &world->Nature, ListBeings::EMPTY);
 		return;
 	}
 	Flower::Simulate();
@@ -160,8 +145,7 @@ void VioletFlower::Simulate() {
 
 void RedFlower::Simulate() {
 	if (age == 0) {       //RedFlower dies
-		world->Beings[Position.y][Position.x] = ListBeings::EMPTY;
-		world->EraseBeing(this, &world->Nature);
+		world->EraseBeing(this, &world->Nature, ListBeings::EMPTY);
 		return;
 	}
 	Flower::Simulate();
@@ -202,4 +186,29 @@ void Volcano::Explode() {
 	currentBorder = 0;
 	Exploding = true;
 	world->Exploding = true;
+}
+
+void Cross::Simulate() {
+	if (age == 0) {       //Cross is destroyed
+		ListBeings flower = decideDeathFlowerAndErase();
+		world->EraseBeing(this, &world->Objects, flower);
+		return;
+	}
+
+	--age;
+}
+
+/*
+* choosig which flower grows after sheep's death
+*/
+ListBeings Cross::decideDeathFlowerAndErase() {
+
+	int value = rand() % MULTIPLY;
+	if (value > 10) {
+		world->Nature.push_back(make_unique<VioletFlower>(Point(Position.x, Position.y), world));
+		return ListBeings::VIOLET_FLOWER;
+	}
+
+	world->Nature.push_back(make_unique<RedFlower>(Point(Position.x, Position.y), world));
+	return ListBeings::RED_FLOWER;
 }

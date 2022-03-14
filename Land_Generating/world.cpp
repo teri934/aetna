@@ -153,6 +153,7 @@ void World::assignPixels(unsigned char* target, size_t y, size_t x, const size_t
 void World::RenderBeings() {
 
 	renderArray(&Volcanos);
+	renderArray(&Objects);
 	renderArray(&Nature);
 	renderArray(&Animals);
 }
@@ -189,6 +190,9 @@ void World::Simulate() {
 
 	for (size_t i = 0; i < Volcanos.size(); ++i)
 		Volcanos[i]->Simulate();
+
+	for (size_t i = 0; i < Objects.size(); ++i)
+		Objects[i]->Simulate();
 }
 
 bool World::CheckExplodingVolcanos() {
@@ -217,8 +221,8 @@ ListBeings World::GetResultBeing(Being* being, Point& direction) {
 /*
 * erasing being from the vector of current "alive" animals so it is not rendered again
 */
-void World::EraseBeing(Being* being, vector<being_ptr>* arr) {
-	Beings[being->Position.y][being->Position.x] = ListBeings::EMPTY;
+void World::EraseBeing(Being* being, vector<being_ptr>* arr, ListBeings newBeing) {
+	Beings[being->Position.y][being->Position.x] = newBeing;
 	for (int i = ((int)(*arr).size() - 1); i > -1; --i)
 	{
 		if ((*arr)[i]->Position.x == being->Position.x && (*arr)[i]->Position.y == being->Position.y) {

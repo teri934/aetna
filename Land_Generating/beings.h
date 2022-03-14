@@ -19,6 +19,7 @@ enum class ListBeings : Uint8 {
 	RED_FLOWER,
 	SHEEP,
 	VOLCANO,
+	CROSS,
 	EMPTY,
 	NO_SHEEP
 };
@@ -75,13 +76,15 @@ private:
 	const int TOO_CLOSE = 30;
 
 	void modifySheepArray(int number, const Point& position);
-	void decideDeathFlowerAndErase();
+	void createCross();
 	bool checkLivingSpace();
 	bool checkExplosion();
 	bool checkBeing(Point& position);
 };
 
 class Flower : public Being {   //common predecessor for VioletFlower and RedFlower
+protected:
+	void Move(const Point& direction, ListBeings being) override { this->Position = Position; }
 public:
 	Flower(const Point& position, World* world) : Being(position, world) {}
 	ListBeings GetBeing() override { return ListBeings::EMPTY; }
@@ -124,6 +127,22 @@ private:
 	int const BORDER = 96;
 	int const ADD_WAWE = 48;
 	int currentBorder = 0;
+};
+
+class Cross : public Being {
+public:
+	Cross(const Point& position, World* world) : Being(position, world) {}
+	ListBeings GetBeing() override { return ListBeings::CROSS; }
+	Size GetSize() override { return Size(48, 24); }
+	void Simulate() override;
+
+protected:
+	void Move(const Point& direction, ListBeings being) override { this->Position = Position; }
+private:
+	int age = 10;
+	const int MULTIPLY = 160;
+
+	ListBeings decideDeathFlowerAndErase();
 };
 
 #endif // !BEINGS_H_

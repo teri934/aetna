@@ -24,8 +24,8 @@ class World {
 private:
 	size_t SIZE;
 
-	double frequency = 5; //0.1-64
-	int octaves = 2; //1-16
+	double frequency = 8; //0.1-64
+	int octaves = 4; //1-16
 	double fx;
 	double fy;
 	const float FULL_CIRCLE = 360;
@@ -35,7 +35,8 @@ private:
 
 	SDL_Renderer* renderer;
 
-	const vector<string> paths = { "images/violet_flower_mini.bmp", "images/red_flower_mini.bmp", "images/sheep_mini.bmp", "images/volcano_mini.bmp" };
+	const vector<string> paths = { "images/violet_flower_mini.bmp", "images/red_flower_mini.bmp", "images/sheep_mini.bmp", 
+		                           "images/volcano_mini.bmp", "images/cross_mini.bmp"};
 	vector<SDL_Texture*> textures;
 	void generateTextures();
 
@@ -56,6 +57,7 @@ public:
 	vector<being_ptr> Nature;
 	vector<being_ptr> Animals;
 	vector<being_ptr> Volcanos;
+	vector<being_ptr> Objects;
 	vector<vector<bool>> ExplosionTerrain;
 
 	World(size_t HEIGHT, size_t WIDTH, SDL_Renderer* renderer) : HEIGHT(HEIGHT), WIDTH(WIDTH), renderer(renderer){
@@ -82,7 +84,7 @@ public:
 	void Simulate();
 	Point GetResultPosition(Being* being, const Point& direction);
 	ListBeings GetResultBeing(Being* being, Point& direction);
-	void EraseBeing(Being* being, vector<being_ptr>* arr);
+	void EraseBeing(Being* being, vector<being_ptr>* arr, ListBeings newBeing);
 	void LockAndRender(SDL_Texture* texture, bool exploding);
 	void CheckClick(unsigned int x, unsigned int y);
 	bool CheckExplodingVolcanos();
