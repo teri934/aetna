@@ -36,7 +36,9 @@ private:
 	SDL_Rect menu;
 	int stepMenu;
 	int paddingMenu;
+	int xMenu;
 	Size sizeMenu;
+	int indexFigure;
 
 	SDL_Renderer* renderer;
 
@@ -50,6 +52,8 @@ private:
 	void generateDefaultBeings();
 	void renderArray(vector<being_ptr>* arr);
 	void checkVolcanos(unsigned int x, unsigned int y);
+	bool checkMenuFigures(unsigned int x, unsigned int y);
+	bool checkFigure(unsigned int x, unsigned int y, int index);
 	void assignPixels(unsigned char* target, size_t y, size_t x, const size_t HUE, float value);
 
 
@@ -57,7 +61,10 @@ public:
 	size_t HEIGHT;
 	size_t WIDTH;
 	Size WorldSize;
+
 	bool Exploding = false;
+	bool ClickMenu = false;
+
 	vector<vector<ListBeings>> Beings;
 	vector<being_ptr> Nature;
 	vector<being_ptr> Animals;
@@ -90,6 +97,7 @@ public:
 		stepMenu = menu.h / (MULTI >> 1);
 		paddingMenu = menu.h / 3;
 		sizeMenu = Size(menu.w, stepMenu);
+		xMenu = menu.x + menu.w / MULTI;
 	}
 
 	void RenderTerrain(unsigned char* target);
@@ -102,6 +110,7 @@ public:
 	void EraseBeing(Being* being, vector<being_ptr>* arr, ListBeings newBeing);
 	void LockAndRender(SDL_Texture* texture, bool exploding);
 	void CheckClick(unsigned int x, unsigned int y);
+	void CheckUnclick(unsigned int x, unsigned int y);
 	bool CheckExplodingVolcanos();
 };
 

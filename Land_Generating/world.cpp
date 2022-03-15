@@ -185,10 +185,10 @@ void World::RenderMenu() {
 	SDL_Rect rect;
 	rect.w = menu.w;
 	rect.h = stepMenu;
-	rect.x = menu.x + menu.w / MULTI;
-	for (size_t i = 0; i < textures.size()-2; ++i)  //without cross and background menu texture
+	rect.x = xMenu;
+	for (int i = 0; i < textures.size()-2; ++i)  //without cross and background menu texture
 	{
-		rect.y = (int)i * stepMenu + paddingMenu;
+		rect.y = i * stepMenu + paddingMenu;
 		SDL_RenderCopy(renderer, textures[i], NULL, &rect);
 	}
 }
@@ -256,7 +256,41 @@ void World::EraseBeing(Being* being, vector<being_ptr>* arr, ListBeings newBeing
 
 
 void World::CheckClick(unsigned int x, unsigned int y) {
-	checkVolcanos(x, y);
+
+	if(!checkMenuFigures(x, y))   //checking clicking on the volcanos if no menu figure was clicked
+		checkVolcanos(x, y);
+}
+
+void World::CheckUnclick(unsigned int x, unsigned int y) {
+	if (ClickMenu) {
+		ClickMenu = false;
+
+		if (Beings[y][x] != ListBeings::EMPTY)
+			return;
+
+		switch (indexFigure) {
+
+		case static_cast<uint8_t>(ListBeings::VIOLET_FLOWER):
+			Nature.push_back(make_unique<VioletFlower>(Point(x, y), this));
+			Beings[y][x] = ListBeings::VIOLET_FLOWER;
+			break;
+		case static_cast < uint8_t>(ListBeings::RED_FLOWER):
+			Nature.push_back(make_unique<RedFlower>(Point(x, y), this));
+			Beings[y][x] = ListBeings::RED_FLOWER;
+			break;
+		case static_cast <uint8_t>(ListBeings::SHEEP):
+			Animals.push_back(make_unique<Sheep>(Point(x, y), this));
+			Beings[y][x] = ListBeings::SHEEP;
+			break;
+		case static_cast <uint8_t>(ListBeings::VOLCANO):
+			Volcanos.push_back(make_unique<Volcano>(Point(x, y), this));
+			Beings[y][x] = ListBeings::VOLCANO;
+			break;
+		default:
+			break;
+		}
+;
+	}
 }
 
 /*
@@ -281,3 +315,35 @@ void World::checkVolcanos(unsigned int x, unsigned int y) {
 			dynamic_cast<Volcano*>(Volcanos[i].get())->Explode();
 	}
 }
+
+bool World::checkMenuFigures(unsigned int x, unsigned int y) {
+
+	for (int i = 0; i < textures.size() - 2; ++i)
+	{
+		if (checkFigure(x, y, i))
+			return true;
+	}
+
+	return false;
+}
+
+
+bool World::checkFigure(unsigned int x, unsigned int y, int index) {
+
+	int x_min = x - sizeMenu.width;
+	int x_max = x + (sizeMenu.width >> 1);
+	int y_min = y - sizeMenu.height;
+	int y_max = y + sizeMenu.height;
+
+
+
+	int yMenu = index * stepMenu + paddingMenu;
+	if (xMenu >= x_min && xMenu <= x_max && yMenu >= y_min && yMenu <= y_max) {
+		ClickMenu = true;
+		indexFigure = index;
+		return true;
+	}
+
+	return false;
+}
+
