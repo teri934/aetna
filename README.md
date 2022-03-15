@@ -1,6 +1,7 @@
 # aetna 🌋🐑
 
 ### Aetna is a simulation of imaginary land with its inhabitants.
+[Developer Documentation](./technical_documentation.md)
 
 <img src="./Land_Generating/images/simulation.png" width = 600>
 
