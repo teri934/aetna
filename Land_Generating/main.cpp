@@ -36,9 +36,6 @@ int main( int argc, char* args[] )
 		SCREEN_WIDTH, SCREEN_HEIGHT
 	);
 
-	//SDL_Surface* icons = SDL_LoadBMP("palettes/tm_icons.bmp");
-	//SDL_Texture* tm_icons = SDL_CreateTextureFromSurface(renderer, icons);
-	//SDL_FreeSurface(icons);
 
 	World world = World(SCREEN_HEIGHT, SCREEN_WIDTH, renderer);;
 	unsigned int current, last = 0;
@@ -63,6 +60,7 @@ int main( int argc, char* args[] )
 
 
 			world.RenderBeings();
+			world.RenderMenu();
 
 			SDL_RenderPresent(renderer);
 

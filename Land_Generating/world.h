@@ -29,14 +29,19 @@ private:
 	double fx;
 	double fy;
 	const float FULL_CIRCLE = 360;
-	const float MULTI = 10;
+	const int MULTI = 10;
 	const size_t HUE_TERRAIN = 111;
 	const size_t HUE_EXPLOSION = 55;
+
+	SDL_Rect menu;
+	int stepMenu;
+	int paddingMenu;
+	Size sizeMenu;
 
 	SDL_Renderer* renderer;
 
 	const vector<string> paths = { "images/violet_flower_mini.bmp", "images/red_flower_mini.bmp", "images/sheep_mini.bmp", 
-		                           "images/volcano_mini.bmp", "images/cross_mini.bmp"};
+		                           "images/volcano_mini.bmp", "images/cross_mini.bmp", "images/menu.bmp"};
 	vector<SDL_Texture*> textures;
 	void generateTextures();
 
@@ -76,10 +81,20 @@ public:
 
 		generateDefaultBeings();
 		generateTextures();
+
+		menu.w = (int)WIDTH / MULTI;
+		menu.h = (int)HEIGHT >> 2;
+		menu.x = 0;
+		menu.y = (menu.h >> 1) - (menu.h >> 2);
+
+		stepMenu = menu.h / (MULTI >> 1);
+		paddingMenu = menu.h / 3;
+		sizeMenu = Size(menu.w, stepMenu);
 	}
 
 	void RenderTerrain(unsigned char* target);
 	void RenderExplosions(unsigned char* target);
+	void RenderMenu();
 	void RenderBeings();
 	void Simulate();
 	Point GetResultPosition(Being* being, const Point& direction);

@@ -29,6 +29,7 @@ void World::generateTextures() {
 	{
 		SDL_Surface* picture = SDL_LoadBMP(paths[i].c_str());
 		SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, picture);
+		SDL_FreeSurface(picture);
 		textures.push_back(move(texture));
 	}
 }
@@ -172,6 +173,23 @@ void World::renderArray(vector<being_ptr>* arr){
 
 		auto ID = static_cast<uint8_t>((*arr)[i]->GetBeing());
 		SDL_RenderCopy(renderer, textures[ID], NULL, &rect);
+	}
+}
+
+/*
+* renders menu on the side
+*/
+void World::RenderMenu() {
+	SDL_RenderCopy(renderer, textures[textures.size()-1], NULL, &menu);
+
+	SDL_Rect rect;
+	rect.w = menu.w;
+	rect.h = stepMenu;
+	rect.x = menu.x + menu.w / MULTI;
+	for (size_t i = 0; i < textures.size()-2; ++i)  //without cross and background menu texture
+	{
+		rect.y = (int)i * stepMenu + paddingMenu;
+		SDL_RenderCopy(renderer, textures[i], NULL, &rect);
 	}
 }
 
