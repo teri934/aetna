@@ -54,7 +54,7 @@ Volcano explodes and simulation slows down when clicking on it and it kills all 
 
 ## Menu
 
-In the menu you have the possibility to choose which figure to add to the simulation scene. Just click on a figure in the menu and the click somewhere on the simulation terrain: the new being/object will appear there (not in case if you click exactly on pixel having something there).
+In the menu you have the possibility to choose which figure to add to the simulation scene. Just click on a figure in the menu and then drag it somewhere on the simulation terrain: the new being/object will appear there (not in case if you click exactly on pixel having something there).
 
 </br></br>
 <img src="./Land_Generating/images/menu.png">
