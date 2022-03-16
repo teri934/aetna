@@ -9,6 +9,30 @@ const unsigned int frame = 100;
 
 int main( int argc, char* args[] )
 {
+	float frequency;
+	int octaves;
+
+	string line;
+	cout << "Choose frequency for the terrain in range 0.1 - 64 (default 8) or press enter:\n";
+	try {
+		getline(cin, line);
+		frequency = stof(line);
+	}
+	catch (exception e) {
+		frequency = 8;
+	}
+
+	std::cout << "Choose octaves for the terrain in range 1 - 16 (default 4) or press enter:\n";
+	try {
+		getline(cin, line);
+		octaves = stoi(line);
+	}
+	catch (exception e) {
+		octaves = 4;
+	}
+
+
+
 	SDL_Window* window = NULL;
 	SDL_Renderer* renderer;
 	SDL_Texture* texture_terrain;
@@ -37,7 +61,7 @@ int main( int argc, char* args[] )
 	);
 
 
-	World world = World(SCREEN_HEIGHT, SCREEN_WIDTH, renderer);;
+	World world = World(SCREEN_HEIGHT, SCREEN_WIDTH, renderer, frequency, octaves);;
 	unsigned int current, last = 0;
 	world.LockAndRender(texture_terrain, false);
 

@@ -24,8 +24,8 @@ class World {
 private:
 	size_t SIZE;
 
-	double frequency = 8; //0.1-64
-	int octaves = 4; //1-16
+	float frequency; //0.1-64
+	int octaves; //1-16
 	double fx;
 	double fy;
 	const float FULL_CIRCLE = 360;
@@ -73,7 +73,8 @@ public:
 	vector<being_ptr> Objects;
 	vector<vector<bool>> ExplosionTerrain;
 
-	World(size_t HEIGHT, size_t WIDTH, SDL_Renderer* renderer) : HEIGHT(HEIGHT), WIDTH(WIDTH), renderer(renderer){
+	World(size_t HEIGHT, size_t WIDTH, SDL_Renderer* renderer, float frequency, int octaves) : HEIGHT(HEIGHT), WIDTH(WIDTH), renderer(renderer), 
+																								frequency(frequency), octaves(octaves) {
 		srand((unsigned int)time(NULL));
 
 		WorldSize = Size((int)WIDTH, (int)HEIGHT);
