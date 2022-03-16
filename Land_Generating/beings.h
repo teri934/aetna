@@ -14,6 +14,10 @@ class World;
 class Being;
 using being_ptr = std::unique_ptr<Being>;
 
+
+/*
+*used in simulation to keep track of beings in the scene
+*/
 enum class ListBeings : Uint8 {
 	VIOLET_FLOWER,
 	RED_FLOWER,

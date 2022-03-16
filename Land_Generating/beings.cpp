@@ -36,7 +36,7 @@ void Sheep::Simulate() {
 	}
 	else if (being == ListBeings::SHEEP)
 		was_other_sheep = true;
-	else if (being == ListBeings::VIOLET_FLOWER)   //flower is eaten when calling Simulate() of VioeltFlower
+	else if (being == ListBeings::VIOLET_FLOWER)   //flower is eaten when calling Simulate() of VioletFlower
 		modifySheepArray(VIOLET_ADD, result_position);
 	else if (being == ListBeings::RED_FLOWER)
 		modifySheepArray(RED_ADD, result_position);
@@ -47,6 +47,9 @@ void Sheep::Simulate() {
 }
 
 
+/*
+* creating cross on the place sheep has died
+*/
 void Sheep::createCross() {
 
 	world->Objects.push_back(make_unique<Cross>(Point(Position.x, Position.y), world));

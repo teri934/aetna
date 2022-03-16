@@ -35,7 +35,7 @@ void World::generateTextures() {
 }
 
 /*
-* generating beings at the beginning of the simulation
+* generating beings at the beginning of the simulation according to some constraints
 */
 void World::generateDefaultBeings() {
 
@@ -138,7 +138,7 @@ void World::RenderExplosions(unsigned char* target) {
 }
 
 /*
-* converts HSV to RGB and low level values to "pixel array" assignement
+* converts HSV to RGB and assigns low level values to "pixel array"
 */
 void World::assignPixels(unsigned char* target, size_t y, size_t x, const size_t HUE, float value) {
 	vector<int> colors = Converter::hsvToRgb(HUE / FULL_CIRCLE, 1, value);
@@ -254,13 +254,19 @@ void World::EraseBeing(Being* being, vector<being_ptr>* arr, ListBeings newBeing
 
 
 
-
+/*
+* checks clicking on the screen
+* prevents volcano explosion if we click on the menu and there is a volcano behind it
+*/
 void World::CheckClick(unsigned int x, unsigned int y) {
 
 	if(!checkMenuFigures(x, y))   //checking clicking on the volcanos if no menu figure was clicked
 		checkVolcanos(x, y);
 }
 
+/*
+* checks if menu figure was clicked (ClickMenu) and spawns a new creature on that place when unclicking
+*/
 void World::CheckUnclick(unsigned int x, unsigned int y) {
 	if (ClickMenu) {
 		ClickMenu = false;
@@ -327,7 +333,9 @@ bool World::checkMenuFigures(unsigned int x, unsigned int y) {
 	return false;
 }
 
-
+/*
+* checking if a figure in the menu was clicked
+*/
 bool World::checkFigure(unsigned int x, unsigned int y, int index) {
 
 	int x_min = x - sizeMenu.width;

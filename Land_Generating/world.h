@@ -33,6 +33,7 @@ private:
 	const size_t HUE_TERRAIN = 111;
 	const size_t HUE_EXPLOSION = 55;
 
+
 	SDL_Rect menu;
 	int stepMenu;
 	int paddingMenu;
@@ -89,7 +90,7 @@ public:
 		generateDefaultBeings();
 		generateTextures();
 
-		menu.w = (int)WIDTH / MULTI;
+		menu.w = (int)WIDTH / MULTI;  //create menu background size on the side of the screen
 		menu.h = (int)HEIGHT >> 2;
 		menu.x = 0;
 		menu.y = (menu.h >> 1) - (menu.h >> 2);

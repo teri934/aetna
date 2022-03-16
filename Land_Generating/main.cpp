@@ -73,9 +73,13 @@ int main( int argc, char* args[] )
 			case SDL_QUIT:
 				cycle = false;
 				break;
-			case SDL_MOUSEBUTTONDOWN:
+			case SDL_MOUSEBUTTONUP:
 				if (event.button.button == SDL_BUTTON_LEFT) {
 					world.CheckUnclick(static_cast<uint32_t>(event.button.x), static_cast<uint32_t>(event.button.y));
+				}
+				break;
+			case SDL_MOUSEBUTTONDOWN:
+				if (event.button.button == SDL_BUTTON_LEFT) {
 					world.CheckClick(static_cast<uint32_t>(event.button.x), static_cast<uint32_t>(event.button.y));
 				}
 				break;
