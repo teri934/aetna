@@ -12,10 +12,14 @@ Except of that the class is responsible placing the right textures in the scene 
 #### API
 Important methods:
 * Simulate() -> calls appropriate methods simulating every Being
-* generateTerrain(vector<vector<float>>* terrain) -> generating terrain using Perlin Noise
+* generateTerrain(vector<vector<float>>* terrain) -> generating terrain using Perlin Noise with pointer on array given
 * generateDefaultBeings() -> according to given probabilities generates Beings at the beginning of the simulation
 
-Then there are methods for rendering such as RenderTerrain(unsigned char* target), RenderExplosions(unsigned char* target), RenderMenu(), RenderBeings()...
+Then there are methods for rendering:
+* RenderTerrain(unsigned char* target) -> assigns and maps the terrain on the screen
+* RenderExplosions(unsigned char* target) -> takes care of visualizing explosions from volcanos
+* RenderBeings() -> "glues" icons of the Beings on the screen
+* RenderMenu() -> visualization if the menu on the side of the screen 
 
 #### Interactions
 In each step of the simulation each Being behaves according to ist definition:
