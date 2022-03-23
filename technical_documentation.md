@@ -3,6 +3,8 @@
 
 ## Main Components
 
+### Start
+After starting the program user is prompted to change default values of frequency and octaves for Perlin Noise (how the terrain should look like).
 
 ### World
 This part consists of the the class World which main task is to do the simulation of the imaginary world. In each step the method Simulate() is called and it calls other appropriate methods that take care of beings/objects in the scene. 
@@ -20,6 +22,9 @@ Then there are methods for rendering:
 * RenderExplosions(unsigned char* target) -> takes care of visualizing explosions from volcanos
 * RenderBeings() -> "glues" icons of the Beings on the screen
 * RenderMenu() -> visualization if the menu on the side of the screen 
+	
+The constructor in the World class accepts dimensions of the screen, pointer to renderer and octaves and frequency. It initializes needed arrays for storing simulation information. 
+
 
 #### Interactions
 In each step of the simulation each Being behaves according to ist definition:
@@ -53,7 +58,7 @@ Methods that have to be implemented by every class inheriting from Being:
 * Size GetSize() -> returns 2D vector of result size that is rendered
 * Simulate() -> defines behavior for being in each step of the simulation
 
-Constructor Being(const Point& p, World* w) initializes Being with its location at the beginning and its pointer on the simulation (World* world)
+Constructor initializes Being with its location at the beginning and its pointer on the simulation (World* world).
 
 
 ### Rendering
