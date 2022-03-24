@@ -52,7 +52,6 @@ The class Beings stores all the Beings/objects that can be in the simulation. Th
 Each being has its own overriden method Simulate() which is responsible for its actions in the World.
 
 #### API
-
 Methods that have to be implemented by every class inheriting from Being:
 * ListBeings GetBeing() -> returns enum ID of the being
 * Size GetSize() -> returns 2D vector of result size that is rendered
@@ -67,8 +66,10 @@ The rendering part takes care of visualization of the simulation on the screen. 
 Maybe it would be better to create separate rendering class and not to operate it from the World class.
 
 ### Perlin noise 
-
 Used for terrain generation ([Perlin Noise](https://www.wikiwand.com/en/Perlin_noise)) in the World part. According to its values for each pixel appropriate intensity is chosen to reflect changing terrain.
+	
+### Libraries
+Except of the standard libraries SDL.h was used for graphics.	
 
 
 ## Possible issues
