@@ -68,7 +68,7 @@ Maybe it would be better to create separate rendering class and not to operate i
 ### Perlin noise 
 Used for terrain generation ([Perlin Noise](https://www.wikiwand.com/en/Perlin_noise)) in the World part. According to its values for each pixel appropriate intensity is chosen to reflect changing terrain.
 	
-### Libraries
+## Libraries
 Except of the standard libraries SDL.h was used for graphics.	
 
 
